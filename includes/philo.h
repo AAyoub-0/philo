@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/02/25 18:33:34 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/02/25 18:51:00 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILO_H
 
 # include <stdio.h>
+# include <stdlib.h>
 # include <pthread.h>
 
 typedef enum e_bool
@@ -44,7 +45,7 @@ typedef struct s_game
 	size_t		time_die;
 	size_t		time_eat;
 	size_t		time_sleep;
-	size_t		nb_max_eat;
+	int			nb_max_eat;
 	t_philo		*philos;
 	pthread_t	*threads;
 }	t_game;
