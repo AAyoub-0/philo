@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/02/25 16:33:07 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:42:27 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 int	main(void)
 {
-	ft_printf("Philo\n");
+	printf("Philo\n");
 	return (0);
 }
