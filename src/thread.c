@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:48:03 by aboumall          #+#    #+#             */
-/*   Updated: 2025/02/26 16:25:06 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:58:29 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_threads(t_game *game)
 {
-	game->threads = malloc(sizeof(pthread_t) * game->nb_philo);
+	game->threads = malloc((sizeof(pthread_t) * game->nb_philo) + 1);
 	if (!game->threads)
 		exit (EXIT_FAILURE);
 }
