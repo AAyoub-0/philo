@@ -6,7 +6,7 @@
 #    By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/25 16:29:40 by aboumall          #+#    #+#              #
-#    Updated: 2025/02/25 17:42:08 by aboumall         ###   ########.fr        #
+#    Updated: 2025/02/26 14:50:44 by aboumall         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFLAGS 	= -Werror -Wextra -Wall -Iincludes
 SRC_DIR 	= 	src
 OBJ_DIR 	= 	obj
 
-SRC_SRC 	= 	main.c
+SRC_SRC 	= 	game.c philo.c thread.c utils.c main.c
 
 
 SRC 		= 	$(addprefix $(SRC_DIR)/, $(SRC_SRC))
