@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayoub <ayoub@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/02/26 15:56:28 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:39:25 by ayoub            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef enum e_philo_state
 typedef struct s_fork
 {
 	t_bool				is_used;
-	pthread_mutex_t		*f_restrict;
+	pthread_mutex_t		*fork_lock;
 	pthread_mutexattr_t	*attr;
 }						t_fork;
 
@@ -63,6 +63,7 @@ typedef struct s_game
 
 typedef struct s_thread
 {
+	pthread_mutex_t		*id_lock;
 	unsigned int	id;
 	t_game	*game;
 }						t_thread;
@@ -75,7 +76,6 @@ void					set_null_game(t_game *game);
 void					init_setup(int ac, char **av, t_game *game);
 t_game					*init_game(int ac, char **av);
 
-void					init_threads(t_game *game);
 void					start_threads(t_game *game);
 
 size_t					mini_atoi(char *str);

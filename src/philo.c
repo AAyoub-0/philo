@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayoub <ayoub@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:44:16 by aboumall          #+#    #+#             */
-/*   Updated: 2025/02/26 14:49:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:22:39 by ayoub            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	init_philo(t_game *game, t_philo *philo)
 		exit (EXIT_FAILURE);
 	philo->fork->is_used = false;
 	philo->state = none;
-	philo->fork->f_restrict = NULL;
+	philo->fork->fork_lock = NULL;
 	philo->fork->attr = NULL;
 }
 

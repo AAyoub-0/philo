@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ayoub <ayoub@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:45:41 by aboumall          #+#    #+#             */
-/*   Updated: 2025/02/26 15:55:21 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:33:44 by ayoub            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,5 @@ t_game	*init_game(int ac, char **av)
 	set_null_game(game);
 	init_setup(ac, av, game);
 	init_philos(game);
-	init_threads(game);
 	return (game);
 }
