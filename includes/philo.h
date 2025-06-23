@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ayoub <ayoub@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/03/04 23:39:25 by ayoub            ###   ########.fr       */
+/*   Updated: 2025/06/23 20:24:30 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,36 +18,33 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-typedef enum e_bool
-{
-	false,
-	true,
-	null
-}						t_bool;
-
 typedef enum e_philo_state
 {
 	eating,
 	sleeping,
 	thinking,
-	none,
-	dead
+	dead,
+	none
 }						t_philo_state;
 
 typedef struct s_fork
 {
-	t_bool				is_used;
-	pthread_mutex_t		*fork_lock;
-	pthread_mutexattr_t	*attr;
+	pthread_mutex_t		fork_lock;
 }						t_fork;
 
 typedef struct s_philo
 {
-	unsigned int		id;
+	pthread_t			thread;
+	size_t				id;
+	size_t				meals_eaten;
+	size_t				last_meal;
 	t_philo_state		state;
-	t_fork				*fork;
+	t_fork				fork;
 	struct s_philo		*prev;
 	struct s_philo		*next;
+	pthread_mutex_t		meals_eaten_lock;
+	pthread_mutex_t		last_meal_lock;
+	pthread_mutex_t		state_lock;
 }						t_philo;
 
 typedef struct s_game
@@ -58,28 +55,12 @@ typedef struct s_game
 	size_t				time_sleep;
 	int					nb_max_eat;
 	t_philo				*philos;
-	pthread_t			*threads;
+	pthread_mutex_t		print_lock;
+	pthread_t			death_thread;
+	t_philo				*dead;
 }						t_game;
 
-typedef struct s_thread
-{
-	pthread_mutex_t		*id_lock;
-	unsigned int	id;
-	t_game	*game;
-}						t_thread;
-
-void					set_null_philo(t_philo *philo);
-void					init_philo(t_game *game, t_philo *philo);
-void					init_philos(t_game *game);
-
-void					set_null_game(t_game *game);
-void					init_setup(int ac, char **av, t_game *game);
-t_game					*init_game(int ac, char **av);
-
-void					start_threads(t_game *game);
-
-size_t					mini_atoi(char *str);
-void					print_philo(t_philo *philo);
-void					print_game(t_game *game);
+void	init_philos(t_game *game);
+void	free_game(t_game *game);
 
 #endif
