@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/23 20:24:30 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/23 21:04:39 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 typedef enum e_philo_state
 {
@@ -41,7 +42,6 @@ typedef struct s_philo
 	t_philo_state		state;
 	t_fork				fork;
 	struct s_philo		*prev;
-	struct s_philo		*next;
 	pthread_mutex_t		meals_eaten_lock;
 	pthread_mutex_t		last_meal_lock;
 	pthread_mutex_t		state_lock;
