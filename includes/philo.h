@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/25 18:41:39 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:10:12 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_philo
 	pthread_mutex_t		meals_eaten_lock;
 	pthread_mutex_t		last_meal_lock;
 	pthread_mutex_t		state_lock;
-	t_game				*game;
+	struct s_game		*game;
 }						t_philo;
 
 typedef struct s_game

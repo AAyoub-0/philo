@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/25 18:43:52 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:12:56 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,22 @@ void	philo_sleep(t_game *game, t_philo *philo)
 	print_state(game, philo);
 }
 
-void	philo_routine(t_philo *philo)
+void	*philo_routine(void *param)
 {
 	t_game	*game;
-
+	t_philo	*philo;
+	
+	philo = (t_philo *)param;
 	game = philo->game;
 	while (true)
 	{
 		philo_think(game, philo);
 		philo_eat(game, philo);
 		philo_sleep(game, philo);
-		if (game->nb_max_eat != -1 && philo->meals_eaten == game->nb_max_eat)
+		if (game->nb_max_eat != -1 && (int)philo->meals_eaten == game->nb_max_eat)
 			break ;
 	}
+	return (NULL);
 }
 
 void	init_philos(t_game *game)

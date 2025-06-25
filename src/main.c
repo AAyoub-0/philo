@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/25 18:24:29 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:14:38 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ static void	setup(int ac, char **av, t_game *game)
 		game->nb_max_eat = -1;
 }
 
+void	*check_dead(void *param)
+{
+	t_game	*game;
+
+	game = (t_game *)param;
+	return (NULL);
+}
+
 static void	init_game(t_game *game)
 {
 	game->philos = malloc(sizeof(t_philo) * game->nb_philo);
@@ -47,7 +55,7 @@ static void	init_game(t_game *game)
 	init_philos(game);
 	game->dead = NULL;
 	pthread_mutex_init(&game->print_lock, NULL);
-	pthread_create(&game->death_thread, NULL, NULL, game);
+	pthread_create(&game->death_thread, NULL, check_dead, game);
 }
 
 int	main(int ac, char **av)
