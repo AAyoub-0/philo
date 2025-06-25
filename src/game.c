@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/25 18:20:23 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:18:43 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	free_game(t_game *game)
 	free(game->philos);
 	game->philos = NULL;
 	pthread_mutex_destroy(&game->print_lock);
-	pthread_cancel(game->death_thread);
 	game->dead = NULL;
 }
 
