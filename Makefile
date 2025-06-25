@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+         #
+#    By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/25 16:29:40 by aboumall          #+#    #+#              #
-#    Updated: 2025/06/23 20:29:37 by aboumall         ###   ########.fr        #
+#    Updated: 2025/06/25 18:44:32 by aboumall         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,7 @@ CFLAGS 	= -Werror -Wextra -Wall -Iincludes
 SRC_DIR 	= 	src
 OBJ_DIR 	= 	obj
 
-SRC_SRC 	= 	philo.c main.c
-
+SRC_SRC 	= 	ft_time.c game.c philo.c utils.c main.c
 
 SRC 		= 	$(addprefix $(SRC_DIR)/, $(SRC_SRC))
 				

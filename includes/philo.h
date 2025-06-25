@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/23 21:04:39 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:41:39 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # include <unistd.h>
 # include <sys/time.h>
 
+typedef enum e_bool
+{
+	true = 1,
+	false = 0
+}						t_bool;
+
 typedef enum e_philo_state
 {
 	eating,
@@ -30,6 +36,7 @@ typedef enum e_philo_state
 
 typedef struct s_fork
 {
+	t_bool				used;
 	pthread_mutex_t		fork_lock;
 }						t_fork;
 
@@ -45,6 +52,7 @@ typedef struct s_philo
 	pthread_mutex_t		meals_eaten_lock;
 	pthread_mutex_t		last_meal_lock;
 	pthread_mutex_t		state_lock;
+	t_game				*game;
 }						t_philo;
 
 typedef struct s_game
@@ -61,6 +69,17 @@ typedef struct s_game
 }						t_game;
 
 void	init_philos(t_game *game);
+
 void	free_game(t_game *game);
+void	set_state(t_philo *philo, t_philo_state state);
+void	set_meals_eaten(t_philo *philo, size_t meals);
+void	set_last_meal(t_philo *philo, size_t last_meal);
+
+long	ft_get_time(void);
+long	ft_get_delay(long start_time);
+void	ft_usleep(long delay);
+
+void	print_state(t_game *game, t_philo *philo);
+void	print_fork(t_game *game, t_philo *philo);
 
 #endif

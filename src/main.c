@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/23 20:37:21 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:24:29 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 size_t	mini_atoi(char *str)
 {
 	size_t	result;
-	int i;
-	
+	int		i;
+
 	i = 0;
 	result = 0;
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
@@ -53,7 +53,7 @@ static void	init_game(t_game *game)
 int	main(int ac, char **av)
 {
 	t_game	game;
-	
+
 	setup(ac, av, &game);
 	init_game(&game);
 	return (0);
