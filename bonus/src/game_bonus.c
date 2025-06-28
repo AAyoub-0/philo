@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game.c                                             :+:      :+:    :+:   */
+/*   game_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:38:47 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 01:47:30 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
+
+void	sem_clear(sem_t *sem, const char *name)
+{
+	if (sem)
+	{
+		sem_close(sem);
+		sem_unlink(name);
+	}
+}
 
 void	free_game(t_game *game)
 {
@@ -19,34 +28,37 @@ void	free_game(t_game *game)
 	i = 0;
 	while (i < game->nb_philo)
 	{
-		pthread_mutex_destroy(&game->philos[i].fork.fork_lock);
-		pthread_mutex_destroy(&game->philos[i].meals_eaten_lock);
-		pthread_mutex_destroy(&game->philos[i].last_meal_lock);
-		pthread_mutex_destroy(&game->philos[i].state_lock);
+		if (game->philos[i].pid > 0)
+			kill(game->philos[i].pid, SIGKILL);
+		sem_clear(game->philos[i].meals_eaten_sem, MEALS_EATEN_SEM_NAME);
+		sem_clear(game->philos[i].last_meal_sem, LAST_MEAL_SEM_NAME);
+		sem_clear(game->philos[i].state_sem, STATE_SEM_NAME);
 		i++;
 	}
 	free(game->philos);
 	game->philos = NULL;
-	pthread_mutex_destroy(&game->print_lock);
-	pthread_mutex_destroy(&game->dead_lock);
-	pthread_mutex_destroy(&game->nb_eat_lock);
+	sem_clear(game->print_sem, PRINT_SEM_NAME);
+	sem_clear(game->nb_eat_sem, NB_EAT_SEM_NAME);
+	sem_clear(game->dead_sem, DEAD_SEM_NAME);
+	sem_clear(game->start_sem, START_SEM_NAME);
+	sem_clear(game->forks_sem, FORKS_SEM_NAME);
 	game->dead = NULL;
 }
 
 void	set_dead(t_game *game, t_philo *philo)
 {
-	pthread_mutex_lock(&game->dead_lock);
+	sem_wait(game->dead_sem);
 	game->dead = philo;
-	pthread_mutex_unlock(&game->dead_lock);
+	sem_post(game->dead_sem);
 }
 
 t_philo	*get_dead(t_game *game)
 {
 	t_philo *dead;
 
-	pthread_mutex_lock(&game->dead_lock);
+	sem_wait(game->dead_sem);
 	dead = game->dead;
-	pthread_mutex_unlock(&game->dead_lock);
+	sem_post(game->dead_sem);
 	return (dead);
 }
 

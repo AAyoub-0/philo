@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:48:34 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 01:06:51 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static void	init_game(t_game *game)
 	game->dead_printed = false;
 	init_philos(game);
 	pthread_create(&game->death_thread, NULL, death_check, game);
-	set_start(game, true);
 }
 
 static void	start_game(t_game *game)
@@ -46,6 +45,7 @@ static void	start_game(t_game *game)
 	size_t	i;
 
 	i = 0;
+	set_start(game, true);
 	while (i < game->nb_philo)
 	{
 		pthread_join(game->philos[i].thread, NULL);

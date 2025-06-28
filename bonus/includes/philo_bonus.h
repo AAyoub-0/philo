@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:48:12 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 01:47:27 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 # define PHILO_H
 
 # include <pthread.h>
+# include <semaphore.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <signal.h>
+# include <sys/wait.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <fcntl.h>
 
 # define USAGE "Usage: ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]\n"
 # define ERROR "Error: Invalid arguments. All arguments must be positive integers.\n"
@@ -35,6 +39,15 @@
 # define BOLD        "\033[1m"
 # define UNDERLINE   "\033[4m"
 
+# define PRINT_SEM_NAME "print_sem"
+# define NB_EAT_SEM_NAME "nb_eat_sem"
+# define DEAD_SEM_NAME "dead_sem"
+# define START_SEM_NAME "start_sem"
+# define FORKS_SEM_NAME "forks_sem"
+# define MEALS_EATEN_SEM_NAME "meals_eaten_sem"
+# define LAST_MEAL_SEM_NAME "last_meal_sem"
+# define STATE_SEM_NAME "state_sem"
+
 
 typedef enum e_bool
 {
@@ -51,24 +64,17 @@ typedef enum e_philo_state
 	none
 }						t_philo_state;
 
-typedef struct s_fork
-{
-	t_bool				used;
-	pthread_mutex_t		fork_lock;
-}						t_fork;
-
 typedef struct s_philo
 {
+	pid_t				pid;
 	pthread_t			thread;
 	size_t				id;
 	size_t				meals_eaten;
 	size_t				last_meal;
 	t_philo_state		state;
-	t_fork				fork;
-	struct s_philo		*prev;
-	pthread_mutex_t		meals_eaten_lock;
-	pthread_mutex_t		last_meal_lock;
-	pthread_mutex_t		state_lock;
+	sem_t				*meals_eaten_sem;
+	sem_t				*last_meal_sem;
+	sem_t				*state_sem;
 	struct s_game		*game;
 }						t_philo;
 
@@ -84,14 +90,17 @@ typedef struct s_game
 	t_philo				*philos;
 	t_philo				*dead;
 	t_bool				dead_printed;
-	pthread_mutex_t		print_lock;
-	pthread_mutex_t		nb_eat_lock;
-	pthread_mutex_t		dead_lock;
-	pthread_mutex_t		start_lock;
+	sem_t				*print_sem;
+	sem_t				*nb_eat_sem;
+	sem_t				*dead_sem;
+	sem_t				*start_sem;
+	sem_t				*forks_sem;
+	// delete all these
 	pthread_t			death_thread;
 }						t_game;
 
 void	init_philos(t_game *game);
+void	*philo_routine(void *param);
 
 void	*death_check(void *param);
 void	free_game(t_game *game);
@@ -115,7 +124,6 @@ void	ft_usleep(long delay);
 
 void	print_state(t_game *game, t_philo *philo);
 void	print_fork(t_game *game, t_philo *philo);
-t_bool	first_fork(t_game *game, t_philo *philo);
 size_t	mini_atoi(char *str);
 t_bool	is_digit(char c);
 

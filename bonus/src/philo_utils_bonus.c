@@ -1,54 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   philo_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:39:42 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:40:15 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 01:40:10 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 void	set_meals_eaten(t_philo *philo, size_t meals)
 {
-	pthread_mutex_lock(&philo->meals_eaten_lock);
+	sem_wait(philo->meals_eaten_sem);
 	philo->meals_eaten = meals;
-	pthread_mutex_unlock(&philo->meals_eaten_lock);
+	sem_post(philo->meals_eaten_sem);
 }
 
 size_t	get_meals_eaten(t_philo *philo)
 {
 	size_t	meals;
 
-	pthread_mutex_lock(&philo->meals_eaten_lock);
+	sem_wait(philo->meals_eaten_sem);
 	meals = philo->meals_eaten;
-	pthread_mutex_unlock(&philo->meals_eaten_lock);
+	sem_post(philo->meals_eaten_sem);
 	return (meals);
 }
 
 void	set_last_meal(t_philo *philo, size_t last_meal)
 {
-	pthread_mutex_lock(&philo->last_meal_lock);
+	sem_wait(philo->last_meal_sem);
 	philo->last_meal = last_meal;
-	pthread_mutex_unlock(&philo->last_meal_lock);
+	sem_post(philo->last_meal_sem);
 }
 
 size_t	get_last_meal(t_philo *philo)
 {
 	size_t	last_meal;
 
-	pthread_mutex_lock(&philo->last_meal_lock);
+	sem_wait(philo->last_meal_sem);
 	last_meal = philo->last_meal;
-	pthread_mutex_unlock(&philo->last_meal_lock);
+	sem_post(philo->last_meal_sem);
 	return (last_meal);
 }
 
 void	set_state(t_philo *philo, t_philo_state state)
 {
-	pthread_mutex_lock(&philo->state_lock);
+	sem_wait(philo->state_sem);
 	philo->state = state;
-	pthread_mutex_unlock(&philo->state_lock);
+	sem_post(philo->state_sem);
 }

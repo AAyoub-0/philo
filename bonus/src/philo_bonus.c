@@ -1,40 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:56:43 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 01:19:06 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 t_bool	philo_eat(t_game *game, t_philo *philo)
 {
-	if (!first_fork(game, philo))
+	if (get_dead(game) != NULL)
 		return (false);
-	pthread_mutex_lock(&philo->prev->fork.fork_lock);
+	sem_wait(game->forks_sem);
+	print_fork(game, philo);
 	if (get_dead(game) != NULL)
 	{
-		philo->fork.used = false;
-		pthread_mutex_unlock(&philo->fork.fork_lock);
-		pthread_mutex_unlock(&philo->prev->fork.fork_lock);
+		sem_post(game->forks_sem);
 		return (false);
 	}
+	sem_wait(game->forks_sem);
 	print_fork(game, philo);
-	philo->prev->fork.used = true;
 	set_state(philo, eating);
 	print_state(game, philo);
 	set_last_meal(philo, ft_get_time());
 	set_meals_eaten(philo, get_meals_eaten(philo) + 1);
 	ft_usleep(game->time_eat);
-	philo->prev->fork.used = false;
-	pthread_mutex_unlock(&philo->prev->fork.fork_lock);
-	philo->fork.used = false;
-	pthread_mutex_unlock(&philo->fork.fork_lock);
+	sem_post(game->forks_sem);
+	sem_post(game->forks_sem);
 	return (true);
 }
 
@@ -94,21 +91,9 @@ void	init_philos(t_game *game)
 		game->philos[i].game = game;
 		game->philos[i].id = i + 1;
 		game->philos[i].meals_eaten = 0;
-		game->philos[i].last_meal = ft_get_time();
-		pthread_mutex_init(&game->philos[i].fork.fork_lock, NULL);
-		pthread_mutex_init(&game->philos[i].meals_eaten_lock, NULL);
-		pthread_mutex_init(&game->philos[i].last_meal_lock, NULL);
-		pthread_mutex_init(&game->philos[i].state_lock, NULL);
-		if (i > 0)
-			game->philos[i].prev = &game->philos[i - 1];
-		else
-		{
-			if (game->nb_philo == 1)
-				game->philos[i].prev = NULL;
-			else
-				game->philos[i].prev = &game->philos[game->nb_philo - 1];
-		}
-		pthread_create(&game->philos[i].thread, NULL, philo_routine,
-			&game->philos[i]);
+		game->philos[i].last_meal = ft_get_time() + 10;
+		game->philos[i].meals_eaten_sem = sem_open(MEALS_EATEN_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
+		game->philos[i].last_meal_sem = sem_open(LAST_MEAL_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
+		game->philos[i].state_sem = sem_open(STATE_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
 	}
 }

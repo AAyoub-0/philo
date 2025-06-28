@@ -6,11 +6,11 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:21:08 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 17:34:43 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/28 23:04:08 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 long	ft_get_time(void)
 {
