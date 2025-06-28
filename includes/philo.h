@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:42:01 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:48:12 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_game
 	int					nb_eat;
 	t_philo				*philos;
 	t_philo				*dead;
+	t_bool				dead_printed;
 	pthread_mutex_t		print_lock;
 	pthread_mutex_t		nb_eat_lock;
 	pthread_mutex_t		dead_lock;

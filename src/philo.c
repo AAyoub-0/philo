@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:33:12 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:56:43 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ t_bool	philo_eat(t_game *game, t_philo *philo)
 	philo->prev->fork.used = true;
 	set_state(philo, eating);
 	print_state(game, philo);
-	ft_usleep(game->time_eat);
 	set_last_meal(philo, ft_get_time());
 	set_meals_eaten(philo, get_meals_eaten(philo) + 1);
+	ft_usleep(game->time_eat);
 	philo->prev->fork.used = false;
 	pthread_mutex_unlock(&philo->prev->fork.fork_lock);
 	philo->fork.used = false;

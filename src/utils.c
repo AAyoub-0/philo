@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:34:18 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:49:18 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	print_state(t_game *game, t_philo *philo)
 {
+	if (game->dead_printed)
+		return ;
 	pthread_mutex_lock(&game->print_lock);
 	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), philo->id);
 	if (philo->state == thinking)
@@ -23,7 +25,10 @@ void	print_state(t_game *game, t_philo *philo)
 	else if (philo->state == sleeping)
 		printf("is  " BLUE "sleeping" RESET "\n");
 	else if (philo->state == dead)
+	{
 		printf( BOLD "died" RESET "\n");
+		game->dead_printed = true;
+	}
 	pthread_mutex_unlock(&game->print_lock);
 }
 

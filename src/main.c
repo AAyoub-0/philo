@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:43:40 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:48:34 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	init_game(t_game *game)
 	pthread_mutex_init(&game->dead_lock, NULL);
 	pthread_mutex_init(&game->start_lock, NULL);
 	game->start = false;
+	game->dead_printed = false;
 	init_philos(game);
 	pthread_create(&game->death_thread, NULL, death_check, game);
 	set_start(game, true);
