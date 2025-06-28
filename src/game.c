@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/25 19:18:43 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:38:47 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,56 @@ void	free_game(t_game *game)
 	free(game->philos);
 	game->philos = NULL;
 	pthread_mutex_destroy(&game->print_lock);
+	pthread_mutex_destroy(&game->dead_lock);
+	pthread_mutex_destroy(&game->nb_eat_lock);
 	game->dead = NULL;
 }
 
-void	set_state(t_philo *philo, t_philo_state state)
+void	set_dead(t_game *game, t_philo *philo)
 {
-	pthread_mutex_lock(&philo->state_lock);
-	philo->state = state;
-	pthread_mutex_unlock(&philo->state_lock);
+	pthread_mutex_lock(&game->dead_lock);
+	game->dead = philo;
+	pthread_mutex_unlock(&game->dead_lock);
 }
 
-void	set_meals_eaten(t_philo *philo, size_t meals)
+t_philo	*get_dead(t_game *game)
 {
-	pthread_mutex_lock(&philo->meals_eaten_lock);
-	philo->meals_eaten = meals;
-	pthread_mutex_unlock(&philo->meals_eaten_lock);
+	t_philo *dead;
+
+	pthread_mutex_lock(&game->dead_lock);
+	dead = game->dead;
+	pthread_mutex_unlock(&game->dead_lock);
+	return (dead);
 }
 
-void	set_last_meal(t_philo *philo, size_t last_meal)
+void	*death_check(void *param)
 {
-	pthread_mutex_lock(&philo->last_meal_lock);
-	philo->last_meal = last_meal;
-	pthread_mutex_unlock(&philo->last_meal_lock);
+	t_game	*game;
+	size_t	current_time;
+	size_t	i;
+
+	game = (t_game *)param;
+	while (!get_start(game))
+		ft_usleep(100);
+	while (true)
+	{
+		i = 0;
+		while (i < game->nb_philo)
+		{
+			current_time = ft_get_time();
+			if (current_time - get_last_meal(&game->philos[i]) >= game->time_die)
+			{
+				set_state(&game->philos[i], dead);
+				set_dead(game, &game->philos[i]);
+				print_state(game, &game->philos[i]);
+				set_state(&game->philos[i], none);
+				return (NULL);
+			}
+			if (game->nb_max_eat != -1 && get_nb_eat(game) == (int)game->nb_philo)
+				return (NULL);
+			i++;
+		}
+		ft_usleep(100);
+	}
+	return (NULL);
 }

@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/25 19:14:38 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:43:40 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-size_t	mini_atoi(char *str)
-{
-	size_t	result;
-	int		i;
-
-	i = 0;
-	result = 0;
-	while (str[i] && str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + str[i] - '0';
-		i++;
-	}
-	return (result);
-}
 
 static void	setup(int ac, char **av, t_game *game)
 {
@@ -39,30 +24,72 @@ static void	setup(int ac, char **av, t_game *game)
 		game->nb_max_eat = -1;
 }
 
-void	*check_dead(void *param)
-{
-	t_game	*game;
-
-	game = (t_game *)param;
-	return (NULL);
-}
-
 static void	init_game(t_game *game)
 {
 	game->philos = malloc(sizeof(t_philo) * game->nb_philo);
 	if (!game->philos)
 		exit(EXIT_FAILURE);
-	init_philos(game);
 	game->dead = NULL;
 	pthread_mutex_init(&game->print_lock, NULL);
-	pthread_create(&game->death_thread, NULL, check_dead, game);
+	pthread_mutex_init(&game->nb_eat_lock, NULL);
+	pthread_mutex_init(&game->dead_lock, NULL);
+	pthread_mutex_init(&game->start_lock, NULL);
+	game->start = false;
+	init_philos(game);
+	pthread_create(&game->death_thread, NULL, death_check, game);
+	set_start(game, true);
+}
+
+static void	start_game(t_game *game)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < game->nb_philo)
+	{
+		pthread_join(game->philos[i].thread, NULL);
+		i++;
+	}
+	pthread_join(game->death_thread, NULL);
+}
+
+t_bool	check_args(int ac, char **av)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (i < ac)
+	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (!is_digit(av[i][j]))
+				return (false);
+			j++;
+		}
+		i++;
+	}
+	return (true);
 }
 
 int	main(int ac, char **av)
 {
 	t_game	game;
 
+	if (ac < 5 || ac > 6)
+	{
+		printf(USAGE);
+		return (1);
+	}
+	else if (!check_args(ac, av))
+	{
+		printf(ERROR);
+		return (2);
+	}
 	setup(ac, av, &game);
 	init_game(&game);
+	start_game(&game);
+	free_game(&game);
 	return (0);
 }

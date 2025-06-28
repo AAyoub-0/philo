@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+         #
+#    By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/25 16:29:40 by aboumall          #+#    #+#              #
-#    Updated: 2025/06/25 18:44:32 by aboumall         ###   ########.fr        #
+#    Updated: 2025/06/28 18:41:23 by aboumall         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,12 @@ HEAD 	= includes/philo.h
 
 CC 		= cc
 
-CFLAGS 	= -Werror -Wextra -Wall -Iincludes
+CFLAGS 	= -Werror -Wextra -Wall -Iincludes -std=gnu11 -g
 
 SRC_DIR 	= 	src
 OBJ_DIR 	= 	obj
 
-SRC_SRC 	= 	ft_time.c game.c philo.c utils.c main.c
+SRC_SRC 	= 	ft_time.c game.c game_utils.c philo.c philo_utils.c utils.c main.c
 
 SRC 		= 	$(addprefix $(SRC_DIR)/, $(SRC_SRC))
 				
