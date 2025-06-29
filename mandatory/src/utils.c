@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:49:18 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:57:00 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	print_state(t_game *game, t_philo *philo)
 	{
 		printf( BOLD "died" RESET "\n");
 		game->dead_printed = true;
+		return ;
 	}
 	pthread_mutex_unlock(&game->print_lock);
 }
@@ -35,7 +36,8 @@ void	print_state(t_game *game, t_philo *philo)
 void	print_fork(t_game *game, t_philo *philo)
 {
 	pthread_mutex_lock(&game->print_lock);
-	printf("%zu %zu has " CYAN "taken a fork" RESET "\n", ft_get_time(), philo->id);
+	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), philo->id);
+	printf("has " CYAN "taken a fork" RESET "\n");
 	pthread_mutex_unlock(&game->print_lock);
 }
 
