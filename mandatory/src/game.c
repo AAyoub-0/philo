@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 21:28:31 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/07/05 01:39:34 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	free_game(t_game *game)
 		pthread_mutex_destroy(&game->philos[i].fork.fork_lock);
 		pthread_mutex_destroy(&game->philos[i].meals_eaten_lock);
 		pthread_mutex_destroy(&game->philos[i].last_meal_lock);
-		pthread_mutex_destroy(&game->philos[i].state_lock);
 		i++;
 	}
 	free(game->philos);
@@ -30,6 +29,7 @@ void	free_game(t_game *game)
 	pthread_mutex_destroy(&game->print_lock);
 	pthread_mutex_destroy(&game->dead_lock);
 	pthread_mutex_destroy(&game->nb_eat_lock);
+	pthread_mutex_destroy(&game->start_lock);
 	game->dead = NULL;
 }
 
@@ -67,10 +67,8 @@ void	*death_check(void *param)
 			current_time = ft_get_time();
 			if (current_time - get_last_meal(&game->philos[i]) >= game->time_die)
 			{
-				set_state(&game->philos[i], dead);
 				set_dead(game, &game->philos[i]);
-				print_state(game, &game->philos[i]);
-				set_state(&game->philos[i], none);
+				print_state(game, &game->philos[i], dead);
 				return (NULL);
 			}
 			if (game->nb_max_eat != -1 && get_nb_eat(game) == (int)game->nb_philo)

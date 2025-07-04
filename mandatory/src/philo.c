@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 21:27:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/07/05 01:26:22 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ t_bool	philo_eat(t_game *game, t_philo *philo)
 	}
 	print_fork(game, philo);
 	philo->prev->fork.used = true;
-	set_state(philo, eating);
-	print_state(game, philo);
+	print_state(game, philo, eating);
 	set_last_meal(philo, ft_get_time());
 	set_meals_eaten(philo, get_meals_eaten(philo) + 1);
 	ft_usleep(game->time_eat);
@@ -42,8 +41,7 @@ t_bool	philo_think(t_game *game, t_philo *philo)
 {
 	if (get_dead(game) != NULL)
 		return (false);
-	set_state(philo, thinking);
-	print_state(game, philo);
+	print_state(game, philo, thinking);
 	return (true);
 }
 
@@ -51,9 +49,8 @@ t_bool	philo_sleep(t_game *game, t_philo *philo)
 {
 	if (get_dead(game) != NULL)
 		return (false);
-	set_state(philo, sleeping);
+	print_state(game, philo, sleeping);
 	ft_usleep(game->time_sleep);
-	print_state(game, philo);
 	return (true);
 }
 
@@ -66,7 +63,7 @@ void	*philo_routine(void *param)
 	game = philo->game;
 	while (!get_start(game))
 		ft_usleep(100);
-	philo->last_meal = ft_get_time();
+	set_last_meal(philo, ft_get_time());
 	while (true)
 	{
 		if (!philo_eat(game, philo))
@@ -98,7 +95,6 @@ void	init_philos(t_game *game)
 		pthread_mutex_init(&game->philos[i].fork.fork_lock, NULL);
 		pthread_mutex_init(&game->philos[i].meals_eaten_lock, NULL);
 		pthread_mutex_init(&game->philos[i].last_meal_lock, NULL);
-		pthread_mutex_init(&game->philos[i].state_lock, NULL);
 		if (i > 0)
 			game->philos[i].prev = &game->philos[i - 1];
 		else

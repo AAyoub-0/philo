@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:39:42 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:40:15 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/07/05 01:19:39 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,4 @@ size_t	get_last_meal(t_philo *philo)
 	last_meal = philo->last_meal;
 	pthread_mutex_unlock(&philo->last_meal_lock);
 	return (last_meal);
-}
-
-void	set_state(t_philo *philo, t_philo_state state)
-{
-	pthread_mutex_lock(&philo->state_lock);
-	philo->state = state;
-	pthread_mutex_unlock(&philo->state_lock);
 }

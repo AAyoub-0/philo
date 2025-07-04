@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/28 18:48:12 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/07/05 01:39:17 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,10 @@ typedef struct s_philo
 	size_t				id;
 	size_t				meals_eaten;
 	size_t				last_meal;
-	t_philo_state		state;
 	t_fork				fork;
 	struct s_philo		*prev;
 	pthread_mutex_t		meals_eaten_lock;
 	pthread_mutex_t		last_meal_lock;
-	pthread_mutex_t		state_lock;
 	struct s_game		*game;
 }						t_philo;
 
@@ -102,18 +100,20 @@ void	set_last_meal(t_philo *philo, size_t last_meal);
 void	set_nb_eat(t_game *game, int nb_eat);
 void	set_dead(t_game *game, t_philo *philo);
 void	set_start(t_game *game, t_bool start);
+void	set_start_time(t_game *game, size_t start_time);
 
 int		get_nb_eat(t_game *game);
 size_t	get_meals_eaten(t_philo *philo);
 size_t	get_last_meal(t_philo *philo);
 t_philo	*get_dead(t_game *game);
 t_bool	get_start(t_game *game);
+size_t	get_start_time(t_game *game);
 
 long	ft_get_time(void);
 long	ft_get_delay(long start_time);
 void	ft_usleep(long delay);
 
-void	print_state(t_game *game, t_philo *philo);
+void	print_state(t_game *game, t_philo *philo, t_philo_state state);
 void	print_fork(t_game *game, t_philo *philo);
 t_bool	first_fork(t_game *game, t_philo *philo);
 size_t	mini_atoi(char *str);

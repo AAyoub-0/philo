@@ -6,37 +6,46 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 21:57:00 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/07/05 01:36:27 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	print_state(t_game *game, t_philo *philo)
+void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 {
-	if (game->dead_printed)
+	static size_t start_time;
+
+	if (get_dead(game) != NULL)
 		return ;
+	if (start_time == 0)
+		start_time = ft_get_time();
 	pthread_mutex_lock(&game->print_lock);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), philo->id);
-	if (philo->state == thinking)
+	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(start_time), philo->id);
+	if (state == thinking)
 		printf("is  " MAGENTA "thinking" RESET "\n");
-	else if (philo->state == eating)
+	else if (state == eating)
 		printf("is  " YELLOW "eating" RESET "\n");
-	else if (philo->state == sleeping)
+	else if (state == sleeping)
 		printf("is  " BLUE "sleeping" RESET "\n");
-	else if (philo->state == dead)
+	else if (state == dead)
 	{
-		printf( BOLD "died" RESET "\n");
+		printf(BOLD "died" RESET "\n");
 		game->dead_printed = true;
-		return ;
 	}
 	pthread_mutex_unlock(&game->print_lock);
 }
 
 void	print_fork(t_game *game, t_philo *philo)
 {
+	static size_t start_time;
+
+	if (get_dead(game) != NULL)
+		return ;
+	if (start_time == 0)
+		start_time = ft_get_time();
 	pthread_mutex_lock(&game->print_lock);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), philo->id);
+	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(start_time), philo->id);
 	printf("has " CYAN "taken a fork" RESET "\n");
 	pthread_mutex_unlock(&game->print_lock);
 }
