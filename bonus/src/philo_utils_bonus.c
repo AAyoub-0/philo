@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:39:42 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 01:40:10 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:25:43 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,4 @@ size_t	get_last_meal(t_philo *philo)
 	last_meal = philo->last_meal;
 	sem_post(philo->last_meal_sem);
 	return (last_meal);
-}
-
-void	set_state(t_philo *philo, t_philo_state state)
-{
-	sem_wait(philo->state_sem);
-	philo->state = state;
-	sem_post(philo->state_sem);
 }

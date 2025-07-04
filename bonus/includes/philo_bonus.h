@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 01:47:27 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:25:39 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ typedef enum e_philo_state
 typedef struct s_philo
 {
 	pid_t				pid;
-	pthread_t			thread;
 	size_t				id;
 	size_t				meals_eaten;
 	size_t				last_meal;
@@ -76,55 +75,47 @@ typedef struct s_philo
 	sem_t				*last_meal_sem;
 	sem_t				*state_sem;
 	struct s_game		*game;
+	pthread_t			death_thread;
 }						t_philo;
 
 typedef struct s_game
 {
-	t_bool				start;
 	size_t				nb_philo;
 	size_t				time_die;
 	size_t				time_eat;
 	size_t				time_sleep;
 	int					nb_max_eat;
-	int					nb_eat;
 	t_philo				*philos;
-	t_philo				*dead;
-	t_bool				dead_printed;
 	sem_t				*print_sem;
 	sem_t				*nb_eat_sem;
 	sem_t				*dead_sem;
-	sem_t				*start_sem;
 	sem_t				*forks_sem;
-	// delete all these
-	pthread_t			death_thread;
+	pthread_t			nb_eat_thread;
 }						t_game;
+
+sem_t	*sem_clean_open(t_game *game, const char *name, int value);
 
 void	init_philos(t_game *game);
 void	*philo_routine(void *param);
 
 void	*death_check(void *param);
+void	*eat_check(void *param);
 void	free_game(t_game *game);
 
-void	set_state(t_philo *philo, t_philo_state state);
 void	set_meals_eaten(t_philo *philo, size_t meals);
 void	set_last_meal(t_philo *philo, size_t last_meal);
-void	set_nb_eat(t_game *game, int nb_eat);
-void	set_dead(t_game *game, t_philo *philo);
-void	set_start(t_game *game, t_bool start);
 
 int		get_nb_eat(t_game *game);
 size_t	get_meals_eaten(t_philo *philo);
 size_t	get_last_meal(t_philo *philo);
-t_philo	*get_dead(t_game *game);
-t_bool	get_start(t_game *game);
 
 long	ft_get_time(void);
 long	ft_get_delay(long start_time);
 void	ft_usleep(long delay);
 
-void	print_state(t_game *game, t_philo *philo);
+void	print_state(t_game *game, size_t id, t_philo_state state);
 void	print_fork(t_game *game, t_philo *philo);
 size_t	mini_atoi(char *str);
-t_bool	is_digit(char c);
+t_bool	ft_isdigit(char c);
 
 #endif

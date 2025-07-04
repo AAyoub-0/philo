@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 01:47:07 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:35:11 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,32 @@ static void	setup(int ac, char **av, t_game *game)
 		game->nb_max_eat = -1;
 }
 
+sem_t	*sem_clean_open(t_game *game, const char *name, int value)
+{
+	sem_t	*sem;
+
+	sem_unlink(name);
+	sem = sem_open(name, O_CREAT | O_EXCL, 0644, value);
+	if (sem == SEM_FAILED)
+	{
+		perror("Semaphore initialization failed");
+		free_game(game);
+		exit(EXIT_FAILURE);
+	}
+	return (sem);
+}
+
 static void	init_game(t_game *game)
 {
 	game->philos = malloc(sizeof(t_philo) * game->nb_philo);
 	if (!game->philos)
 		exit(EXIT_FAILURE);
-	game->dead = NULL;
-	game->print_sem = sem_open(PRINT_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
-	game->nb_eat_sem = sem_open(NB_EAT_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
-	game->dead_sem = sem_open(DEAD_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
-	game->start_sem = sem_open(START_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
-	game->forks_sem = sem_open(FORKS_SEM_NAME, O_CREAT | O_EXCL, 0644, game->nb_philo);
-	game->start = false;
-	game->dead_printed = false;
+	game->print_sem = sem_clean_open(game, PRINT_SEM_NAME, 1);
+	game->nb_eat_sem = sem_clean_open(game, NB_EAT_SEM_NAME, 0);
+	game->dead_sem = sem_clean_open(game, DEAD_SEM_NAME, 1);
+	game->forks_sem = sem_clean_open(game, FORKS_SEM_NAME, game->nb_philo);
+	pthread_create(&game->nb_eat_thread, NULL, eat_check, game);
 	init_philos(game);
-	pthread_create(&game->death_thread, NULL, death_check, game);
 }
 
 static void	start_game(t_game *game)
@@ -46,7 +57,7 @@ static void	start_game(t_game *game)
 	size_t	i;
 
 	i = 0;
-	set_start(game, true);
+	pthread_detach(game->nb_eat_thread);
 	while (i < game->nb_philo)
 	{
 		game->philos[i].pid = fork();
@@ -58,11 +69,9 @@ static void	start_game(t_game *game)
 		}
 		if (game->philos[i].pid == 0)
 			philo_routine(&game->philos[i]);
-		else
-			waitpid(game->philos[i].pid, NULL, 0);
 		i++;
 	}
-	pthread_join(game->death_thread, NULL);
+	waitpid(-1, NULL, 0);
 }
 
 t_bool	check_args(int ac, char **av)
@@ -76,7 +85,7 @@ t_bool	check_args(int ac, char **av)
 		j = 0;
 		while (av[i][j])
 		{
-			if (!is_digit(av[i][j]))
+			if (!ft_isdigit(av[i][j]))
 				return (false);
 			j++;
 		}

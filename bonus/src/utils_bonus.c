@@ -6,36 +6,32 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 01:42:58 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:55:07 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	print_state(t_game *game, t_philo *philo)
+void	print_state(t_game *game, size_t id, t_philo_state state)
 {
-	if (game->dead_printed)
-		return ;
 	sem_wait(game->print_sem);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), philo->id);
-	if (philo->state == thinking)
+	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), id);
+	if (state == thinking)
 		printf("is  " MAGENTA "thinking" RESET "\n");
-	else if (philo->state == eating)
+	else if (state == eating)
 		printf("is  " YELLOW "eating" RESET "\n");
-	else if (philo->state == sleeping)
+	else if (state == sleeping)
 		printf("is  " BLUE "sleeping" RESET "\n");
-	else if (philo->state == dead)
-	{
+	else if (state == dead)
 		printf( BOLD "died" RESET "\n");
-		game->dead_printed = true;
-	}
 	sem_post(game->print_sem);
 }
 
 void	print_fork(t_game *game, t_philo *philo)
 {
 	sem_wait(game->print_sem);
-	printf("%zu %zu has " CYAN "taken a fork" RESET "\n", ft_get_time(), philo->id);
+	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), philo->id);
+	printf("has " CYAN "taken a fork" RESET "\n");
 	sem_post(game->print_sem);
 }
 
@@ -54,7 +50,7 @@ size_t	mini_atoi(char *str)
 	return (result);
 }
 
-t_bool	is_digit(char c)
+t_bool	ft_isdigit(char c)
 {
 	return (c >= '0' && c <= '9');
 }

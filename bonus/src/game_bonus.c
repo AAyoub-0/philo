@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 01:47:30 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:53:48 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,56 +40,47 @@ void	free_game(t_game *game)
 	sem_clear(game->print_sem, PRINT_SEM_NAME);
 	sem_clear(game->nb_eat_sem, NB_EAT_SEM_NAME);
 	sem_clear(game->dead_sem, DEAD_SEM_NAME);
-	sem_clear(game->start_sem, START_SEM_NAME);
 	sem_clear(game->forks_sem, FORKS_SEM_NAME);
-	game->dead = NULL;
-}
-
-void	set_dead(t_game *game, t_philo *philo)
-{
-	sem_wait(game->dead_sem);
-	game->dead = philo;
-	sem_post(game->dead_sem);
-}
-
-t_philo	*get_dead(t_game *game)
-{
-	t_philo *dead;
-
-	sem_wait(game->dead_sem);
-	dead = game->dead;
-	sem_post(game->dead_sem);
-	return (dead);
 }
 
 void	*death_check(void *param)
 {
+	t_philo	*philo;
 	t_game	*game;
 	size_t	current_time;
-	size_t	i;
 
-	game = (t_game *)param;
-	while (!get_start(game))
-		ft_usleep(100);
+	philo = (t_philo *)param;
+	game = philo->game;
 	while (true)
 	{
-		i = 0;
-		while (i < game->nb_philo)
+		current_time = ft_get_time();
+		if (current_time - get_last_meal(philo) >= game->time_die)
 		{
-			current_time = ft_get_time();
-			if (current_time - get_last_meal(&game->philos[i]) >= game->time_die)
-			{
-				set_state(&game->philos[i], dead);
-				set_dead(game, &game->philos[i]);
-				print_state(game, &game->philos[i]);
-				set_state(&game->philos[i], none);
-				return (NULL);
-			}
-			if (game->nb_max_eat != -1 && get_nb_eat(game) == (int)game->nb_philo)
-				return (NULL);
-			i++;
+			print_state(game, philo->id, dead);
+			sem_wait(game->print_sem);
+			exit(EXIT_SUCCESS);
 		}
 		ft_usleep(100);
+	}
+	return (NULL);
+}
+
+void	*eat_check(void *param)
+{
+	t_game	*game;
+	size_t	meals_eaten;
+
+	game = (t_game *)param;
+	meals_eaten = 0;
+	while (true)
+	{
+		sem_wait(game->nb_eat_sem);
+		++meals_eaten;
+		if (meals_eaten >= game->nb_philo)
+		{
+			free_game(game);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 #    By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/25 16:29:40 by aboumall          #+#    #+#              #
-#    Updated: 2025/06/29 01:42:18 by aboumall         ###   ########.fr        #
+#    Updated: 2025/06/29 21:17:07 by aboumall         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFLAGS 	= -Werror -Wextra -Wall -Iincludes -std=gnu11 -g
 SRC_DIR 	= 	src
 OBJ_DIR 	= 	obj
 
-SRC_SRC 	= 	ft_time_bonus.c game_bonus.c game_utils_bonus.c philo_bonus.c \
+SRC_SRC 	= 	ft_time_bonus.c game_bonus.c philo_bonus.c \
 				philo_utils_bonus.c utils_bonus.c main_bonus.c
 
 SRC 		= 	$(addprefix $(SRC_DIR)/, $(SRC_SRC))

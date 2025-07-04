@@ -6,79 +6,68 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 01:19:06 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:53:33 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-t_bool	philo_eat(t_game *game, t_philo *philo)
+void	philo_eat(t_game *game, t_philo *philo, t_bool done)
 {
-	if (get_dead(game) != NULL)
-		return (false);
+	if (philo->id % 2 == 0)
+		ft_usleep(game->time_eat / 2);
 	sem_wait(game->forks_sem);
-	print_fork(game, philo);
-	if (get_dead(game) != NULL)
-	{
-		sem_post(game->forks_sem);
-		return (false);
-	}
+	if (!done)
+		print_fork(game, philo);
 	sem_wait(game->forks_sem);
-	print_fork(game, philo);
-	set_state(philo, eating);
-	print_state(game, philo);
+	if (!done)
+		print_fork(game, philo);
+	if (!done)
+		print_state(game, philo->id, eating);
 	set_last_meal(philo, ft_get_time());
 	set_meals_eaten(philo, get_meals_eaten(philo) + 1);
 	ft_usleep(game->time_eat);
 	sem_post(game->forks_sem);
 	sem_post(game->forks_sem);
-	return (true);
 }
 
-t_bool	philo_think(t_game *game, t_philo *philo)
+void	philo_think(t_game *game, t_philo *philo, t_bool done)
 {
-	if (get_dead(game) != NULL)
-		return (false);
-	set_state(philo, thinking);
-	print_state(game, philo);
-	return (true);
+	if (done)
+		return ;
+	print_state(game, philo->id, thinking);
 }
 
-t_bool	philo_sleep(t_game *game, t_philo *philo)
+void	philo_sleep(t_game *game, t_philo *philo, t_bool done)
 {
-	if (get_dead(game) != NULL)
-		return (false);
-	set_state(philo, sleeping);
+	if (!done)
+		print_state(game, philo->id, sleeping);
 	ft_usleep(game->time_sleep);
-	print_state(game, philo);
-	return (true);
 }
 
 void	*philo_routine(void *param)
 {
-	t_game	*game;
 	t_philo	*philo;
+	t_bool	done;
 	
 	philo = (t_philo *)param;
-	game = philo->game;
-	while (!get_start(game))
-		ft_usleep(100);
 	philo->last_meal = ft_get_time();
+	pthread_create(&philo->death_thread, NULL, death_check, philo);
+	pthread_detach(philo->death_thread);
+	done = false;
 	while (true)
 	{
-		if (!philo_eat(game, philo))
-			break ;
-		if (game->nb_max_eat != -1 && (int)get_meals_eaten(philo) == game->nb_max_eat)
+		philo_eat(philo->game, philo, done);
+		if (!done && philo->game->nb_max_eat != -1
+				&& (int)get_meals_eaten(philo) == philo->game->nb_max_eat)
 		{
-			set_nb_eat(game, game->nb_eat + 1);
-			break ;
+			done = true;
+			sem_post(philo->game->nb_eat_sem);
 		}
-		if (!philo_think(game, philo))
-			break ;
-		if (!philo_sleep(game, philo))
-			break ;
+		philo_think(philo->game, philo, done);
+		philo_sleep(philo->game, philo, done);
 	}
-	return (NULL);
+	exit(EXIT_SUCCESS);
 }
 
 void	init_philos(t_game *game)
@@ -91,9 +80,8 @@ void	init_philos(t_game *game)
 		game->philos[i].game = game;
 		game->philos[i].id = i + 1;
 		game->philos[i].meals_eaten = 0;
-		game->philos[i].last_meal = ft_get_time() + 10;
-		game->philos[i].meals_eaten_sem = sem_open(MEALS_EATEN_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
-		game->philos[i].last_meal_sem = sem_open(LAST_MEAL_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
-		game->philos[i].state_sem = sem_open(STATE_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
+		game->philos[i].meals_eaten_sem = sem_clean_open(game, MEALS_EATEN_SEM_NAME, 1);
+		game->philos[i].last_meal_sem = sem_clean_open(game, LAST_MEAL_SEM_NAME, 1);
+		game->philos[i].state_sem = sem_clean_open(game, STATE_SEM_NAME, 1);
 	}
 }
