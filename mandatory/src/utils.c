@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/07/05 01:36:27 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/20 04:28:55 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 {
 	static size_t start_time;
 
-	if (get_dead(game) != NULL)
+	if (game->dead_printed)
 		return ;
 	if (start_time == 0)
 		start_time = ft_get_time();
@@ -89,7 +89,7 @@ t_bool	first_fork(t_game *game, t_philo *philo)
 		philo->fork.used = false;
 		pthread_mutex_unlock(&philo->fork.fork_lock);
 		while (get_dead(game) == NULL)
-			ft_usleep(100);
+			continue ;
 		return (false);
 	}
 	return (true);

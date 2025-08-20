@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/07/05 01:39:45 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/20 04:48:29 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 static void	setup(int ac, char **av, t_game *game)
 {
 	game->nb_philo = mini_atoi(av[1]);
+	if (game->nb_philo == 0)
+	{
+		printf(ERROR);
+		exit(EXIT_FAILURE);
+	}
 	game->time_die = mini_atoi(av[2]);
 	game->time_eat = mini_atoi(av[3]);
 	game->time_sleep = mini_atoi(av[4]);
@@ -33,9 +38,8 @@ static void	init_game(t_game *game)
 	pthread_mutex_init(&game->print_lock, NULL);
 	pthread_mutex_init(&game->nb_eat_lock, NULL);
 	pthread_mutex_init(&game->dead_lock, NULL);
-	pthread_mutex_init(&game->start_lock, NULL);
-	game->start = false;
 	game->dead_printed = false;
+	game->start_time = ft_get_time() + (game->nb_philo * 5);
 	init_philos(game);
 	pthread_create(&game->death_thread, NULL, death_check, game);
 }
@@ -45,7 +49,6 @@ static void	start_game(t_game *game)
 	size_t	i;
 
 	i = 0;
-	set_start(game, true);
 	while (i < game->nb_philo)
 	{
 		pthread_join(game->philos[i].thread, NULL);

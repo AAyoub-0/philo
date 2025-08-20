@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/07/05 01:39:34 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/20 04:49:12 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	free_game(t_game *game)
 	pthread_mutex_destroy(&game->print_lock);
 	pthread_mutex_destroy(&game->dead_lock);
 	pthread_mutex_destroy(&game->nb_eat_lock);
-	pthread_mutex_destroy(&game->start_lock);
 	game->dead = NULL;
 }
 
@@ -57,16 +56,18 @@ void	*death_check(void *param)
 	size_t	i;
 
 	game = (t_game *)param;
-	while (!get_start(game))
-		ft_usleep(100);
+	while (ft_get_time() < game->start_time)
+		continue ;
 	while (true)
 	{
 		i = 0;
 		while (i < game->nb_philo)
 		{
 			current_time = ft_get_time();
-			if (current_time - get_last_meal(&game->philos[i]) >= game->time_die)
+			size_t last_meal = get_last_meal(&game->philos[i]);
+			if (current_time - last_meal >= game->time_die)
 			{
+				printf("if result = %zu, last_meal = %zu, time_die = %zu\n", current_time - last_meal, last_meal, game->time_die);
 				set_dead(game, &game->philos[i]);
 				print_state(game, &game->philos[i], dead);
 				return (NULL);
@@ -75,7 +76,7 @@ void	*death_check(void *param)
 				return (NULL);
 			i++;
 		}
-		ft_usleep(100);
+		continue ;
 	}
 	return (NULL);
 }

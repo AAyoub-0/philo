@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/07/05 01:39:17 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/20 04:30:01 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ typedef struct s_philo
 
 typedef struct s_game
 {
-	t_bool				start;
 	size_t				nb_philo;
 	size_t				time_die;
 	size_t				time_eat;
 	size_t				time_sleep;
+	long int			start_time;
 	int					nb_max_eat;
 	int					nb_eat;
 	t_philo				*philos;
@@ -85,7 +85,6 @@ typedef struct s_game
 	pthread_mutex_t		print_lock;
 	pthread_mutex_t		nb_eat_lock;
 	pthread_mutex_t		dead_lock;
-	pthread_mutex_t		start_lock;
 	pthread_t			death_thread;
 }						t_game;
 
@@ -99,15 +98,11 @@ void	set_meals_eaten(t_philo *philo, size_t meals);
 void	set_last_meal(t_philo *philo, size_t last_meal);
 void	set_nb_eat(t_game *game, int nb_eat);
 void	set_dead(t_game *game, t_philo *philo);
-void	set_start(t_game *game, t_bool start);
-void	set_start_time(t_game *game, size_t start_time);
 
 int		get_nb_eat(t_game *game);
 size_t	get_meals_eaten(t_philo *philo);
 size_t	get_last_meal(t_philo *philo);
 t_philo	*get_dead(t_game *game);
-t_bool	get_start(t_game *game);
-size_t	get_start_time(t_game *game);
 
 long	ft_get_time(void);
 long	ft_get_delay(long start_time);

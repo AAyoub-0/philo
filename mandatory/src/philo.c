@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/07/05 01:26:22 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/20 04:46:50 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ t_bool	philo_eat(t_game *game, t_philo *philo)
 		pthread_mutex_unlock(&philo->prev->fork.fork_lock);
 		return (false);
 	}
-	print_fork(game, philo);
 	philo->prev->fork.used = true;
+	print_fork(game, philo);
 	print_state(game, philo, eating);
 	set_last_meal(philo, ft_get_time());
 	set_meals_eaten(philo, get_meals_eaten(philo) + 1);
 	ft_usleep(game->time_eat);
-	philo->prev->fork.used = false;
-	pthread_mutex_unlock(&philo->prev->fork.fork_lock);
 	philo->fork.used = false;
 	pthread_mutex_unlock(&philo->fork.fork_lock);
+	philo->prev->fork.used = false;
+	pthread_mutex_unlock(&philo->prev->fork.fork_lock);
 	return (true);
 }
 
@@ -61,9 +61,9 @@ void	*philo_routine(void *param)
 	
 	philo = (t_philo *)param;
 	game = philo->game;
-	while (!get_start(game))
-		ft_usleep(100);
-	set_last_meal(philo, ft_get_time());
+	while (ft_get_time() < game->start_time)
+		continue ;
+	set_last_meal(philo, game->start_time);
 	while (true)
 	{
 		if (!philo_eat(game, philo))
