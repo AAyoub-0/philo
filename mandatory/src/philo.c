@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/20 04:46:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/21 15:37:01 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,15 @@ void	*philo_routine(void *param)
 	game = philo->game;
 	while (ft_get_time() < game->start_time)
 		continue ;
-	set_last_meal(philo, game->start_time);
+	if (philo->id % 2 == 0)
+		ft_usleep(game->time_eat / 2);
 	while (true)
 	{
 		if (!philo_eat(game, philo))
 			break ;
 		if (game->nb_max_eat != -1 && (int)get_meals_eaten(philo) == game->nb_max_eat)
 		{
-			set_nb_eat(game, game->nb_eat + 1);
+			set_nb_eat(game, get_nb_eat(game) + 1);
 			break ;
 		}
 		if (!philo_think(game, philo))
@@ -91,7 +92,7 @@ void	init_philos(t_game *game)
 		game->philos[i].game = game;
 		game->philos[i].id = i + 1;
 		game->philos[i].meals_eaten = 0;
-		game->philos[i].last_meal = ft_get_time();
+		game->philos[i].last_meal = game->start_time;
 		pthread_mutex_init(&game->philos[i].fork.fork_lock, NULL);
 		pthread_mutex_init(&game->philos[i].meals_eaten_lock, NULL);
 		pthread_mutex_init(&game->philos[i].last_meal_lock, NULL);

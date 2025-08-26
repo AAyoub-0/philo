@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/20 04:28:55 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/21 16:29:10 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 {
-	static size_t start_time;
+	size_t time;
 
 	if (game->dead_printed)
 		return ;
-	if (start_time == 0)
-		start_time = ft_get_time();
+	time = ft_get_delay(game->start_time);
 	pthread_mutex_lock(&game->print_lock);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(start_time), philo->id);
+	printf(GREEN "%zu" RESET " %zu ", time, philo->id);
 	if (state == thinking)
 		printf("is  " MAGENTA "thinking" RESET "\n");
 	else if (state == eating)
@@ -38,14 +37,13 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 
 void	print_fork(t_game *game, t_philo *philo)
 {
-	static size_t start_time;
+	size_t time;
 
 	if (get_dead(game) != NULL)
 		return ;
-	if (start_time == 0)
-		start_time = ft_get_time();
+	time = ft_get_delay(game->start_time);
 	pthread_mutex_lock(&game->print_lock);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(start_time), philo->id);
+	printf(GREEN "%zu" RESET " %zu ", time, philo->id);
 	printf("has " CYAN "taken a fork" RESET "\n");
 	pthread_mutex_unlock(&game->print_lock);
 }
@@ -74,8 +72,6 @@ t_bool	first_fork(t_game *game, t_philo *philo)
 {
 	if (get_dead(game) != NULL)
 		return (false);
-	if (philo->id % 2 == 0)
-		ft_usleep(game->time_eat / 2);
 	pthread_mutex_lock(&philo->fork.fork_lock);
 	if (get_dead(game) != NULL)
 	{
@@ -86,9 +82,7 @@ t_bool	first_fork(t_game *game, t_philo *philo)
 	print_fork(game, philo);
 	if (philo->prev == NULL)
 	{
-		philo->fork.used = false;
-		pthread_mutex_unlock(&philo->fork.fork_lock);
-		while (get_dead(game) == NULL)
+		while (get_dead(game) != NULL)
 			continue ;
 		return (false);
 	}

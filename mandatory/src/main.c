@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/20 04:48:29 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/21 15:00:13 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	init_game(t_game *game)
 	pthread_mutex_init(&game->nb_eat_lock, NULL);
 	pthread_mutex_init(&game->dead_lock, NULL);
 	game->dead_printed = false;
-	game->start_time = ft_get_time() + (game->nb_philo * 5);
+	game->start_time = ft_get_time() + (game->nb_philo * 20);
 	init_philos(game);
 	pthread_create(&game->death_thread, NULL, death_check, game);
 }

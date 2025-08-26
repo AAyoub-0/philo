@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 21:55:07 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/26 19:46:24 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	print_state(t_game *game, size_t id, t_philo_state state)
 {
 	sem_wait(game->print_sem);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), id);
+	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(game->start_time), id);
 	if (state == thinking)
 		printf("is  " MAGENTA "thinking" RESET "\n");
 	else if (state == eating)
@@ -30,7 +30,7 @@ void	print_state(t_game *game, size_t id, t_philo_state state)
 void	print_fork(t_game *game, t_philo *philo)
 {
 	sem_wait(game->print_sem);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_time(), philo->id);
+	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(game->start_time), philo->id);
 	printf("has " CYAN "taken a fork" RESET "\n");
 	sem_post(game->print_sem);
 }

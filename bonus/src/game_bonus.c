@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/06/29 21:53:48 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/26 19:45:55 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	*death_check(void *param)
 			sem_wait(game->print_sem);
 			exit(EXIT_SUCCESS);
 		}
-		ft_usleep(100);
+		usleep(100);
 	}
 	return (NULL);
 }

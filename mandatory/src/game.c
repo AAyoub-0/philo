@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
+/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/20 04:49:12 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/21 14:44:47 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,8 @@ void	*death_check(void *param)
 		while (i < game->nb_philo)
 		{
 			current_time = ft_get_time();
-			size_t last_meal = get_last_meal(&game->philos[i]);
-			if (current_time - last_meal >= game->time_die)
+			if (current_time - get_last_meal(&game->philos[i]) >= game->time_die)
 			{
-				printf("if result = %zu, last_meal = %zu, time_die = %zu\n", current_time - last_meal, last_meal, game->time_die);
 				set_dead(game, &game->philos[i]);
 				print_state(game, &game->philos[i], dead);
 				return (NULL);
@@ -76,7 +74,7 @@ void	*death_check(void *param)
 				return (NULL);
 			i++;
 		}
-		continue ;
+		usleep(100);
 	}
 	return (NULL);
 }
