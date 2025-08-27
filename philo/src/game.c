@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 20:07:55 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 21:04:01 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	*death_check(void *param)
 				&& get_nb_eat(game) == (int)game->nb_philo)
 				return (NULL);
 		}
-		continue ;
+		usleep(10);
 	}
 	return (NULL);
 }
