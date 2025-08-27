@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 14:23:33 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 20:36:47 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,18 @@ static void	init_game(t_game *game)
 	if (!game->philos)
 		exit(EXIT_FAILURE);
 	game->dead = NULL;
-	pthread_mutex_init(&game->print_lock, NULL);
-	pthread_mutex_init(&game->nb_eat_lock, NULL);
-	pthread_mutex_init(&game->dead_lock, NULL);
+	if (pthread_mutex_init(&game->print_lock, NULL) != 0)
+		msg_exit(game, "mutex init failure", 1);
+	if (pthread_mutex_init(&game->nb_eat_lock, NULL) != 0)
+		msg_exit(game, "mutex init failure", 1);
+	if (pthread_mutex_init(&game->dead_lock, NULL) != 0)
+		msg_exit(game, "mutex init failure", 1);
 	game->dead_printed = false;
 	game->start_time = ft_get_time() + (game->nb_philo * 20);
 	init_philos(game);
-	pthread_create(&game->death_thread, NULL, death_check, game);
+	// ne pas exit ici
+	if (pthread_create(&game->death_thread, NULL, death_check, game) != 0)
+		msg_exit(game, "thread creation failure", 1);
 }
 
 static void	start_game(t_game *game)
@@ -51,10 +56,12 @@ static void	start_game(t_game *game)
 	i = 0;
 	while (i < game->nb_philo)
 	{
-		pthread_join(game->philos[i].thread, NULL);
+		if (pthread_join(game->philos[i].thread, NULL) != 0)
+			printf("thread failed to join\n");
 		i++;
 	}
-	pthread_join(game->death_thread, NULL);
+	if (pthread_join(game->death_thread, NULL) != 0)
+		printf("thread failed to join\n");
 }
 
 t_bool	check_args(int ac, char **av)
@@ -92,6 +99,8 @@ int	main(int ac, char **av)
 		return (2);
 	}
 	setup(ac, av, &game);
+	if (game.nb_max_eat == 0)
+		return (0);
 	init_game(&game);
 	start_game(&game);
 	free_game(&game);

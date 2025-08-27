@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 16:49:53 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 20:24:37 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,14 @@ void	print_fork(t_game *game, t_philo *philo)
 	pthread_mutex_unlock(&game->print_lock);
 }
 
+void	msg_exit(t_game *game, char *msg, int code)
+{
+	if (msg)
+		printf("%s\n", msg);
+	free_game(game);
+	exit(code);
+}
+
 size_t	mini_atoi(char *str)
 {
 	size_t	result;
@@ -66,25 +74,4 @@ size_t	mini_atoi(char *str)
 t_bool	is_digit(char c)
 {
 	return (c >= '0' && c <= '9');
-}
-
-t_bool	first_fork(t_game *game, t_philo *philo)
-{
-	if (get_dead(game) != NULL)
-		return (false);
-	pthread_mutex_lock(&philo->fork.fork_lock);
-	if (get_dead(game) != NULL)
-	{
-		pthread_mutex_unlock(&philo->fork.fork_lock);
-		return (false);
-	}
-	philo->fork.used = true;
-	print_fork(game, philo);
-	if (philo->prev == NULL)
-	{
-		while (get_dead(game) != NULL)
-			continue ;
-		return (false);
-	}
-	return (true);
 }

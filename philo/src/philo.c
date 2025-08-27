@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 16:49:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 17:56:35 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,26 @@
 
 t_bool	philo_eat(t_game *game, t_philo *philo)
 {
-	if (!first_fork(game, philo))
-		return (false);
-	pthread_mutex_lock(&philo->prev->fork.fork_lock);
 	if (get_dead(game) != NULL)
+		return (false);
+	if (get_fork_used(&philo->fork) == false)
+		set_fork_used(&philo->fork, true);
+	print_fork(game, philo);
+	if (philo->prev == NULL)
 	{
-		philo->fork.used = false;
-		pthread_mutex_unlock(&philo->fork.fork_lock);
-		pthread_mutex_unlock(&philo->prev->fork.fork_lock);
+		while (get_dead(game) != NULL)
+			continue ;
 		return (false);
 	}
-	philo->prev->fork.used = true;
+	if (get_fork_used(&philo->prev->fork) == false)
+		set_fork_used(&philo->prev->fork, true);
 	print_fork(game, philo);
 	print_state(game, philo, eating);
 	set_last_meal(philo, ft_get_time());
 	set_meals_eaten(philo, get_meals_eaten(philo) + 1);
 	ft_usleep(game->time_eat);
-	philo->fork.used = false;
-	pthread_mutex_unlock(&philo->fork.fork_lock);
-	philo->prev->fork.used = false;
-	pthread_mutex_unlock(&philo->prev->fork.fork_lock);
+	set_fork_used(&philo->fork, false);
+	set_fork_used(&philo->prev->fork, false);
 	return (true);
 }
 
