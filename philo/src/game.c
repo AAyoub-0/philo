@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/21 14:44:47 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:52:28 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	set_dead(t_game *game, t_philo *philo)
 
 t_philo	*get_dead(t_game *game)
 {
-	t_philo *dead;
+	t_philo	*dead;
 
 	pthread_mutex_lock(&game->dead_lock);
 	dead = game->dead;
@@ -52,7 +52,6 @@ t_philo	*get_dead(t_game *game)
 void	*death_check(void *param)
 {
 	t_game	*game;
-	size_t	current_time;
 	size_t	i;
 
 	game = (t_game *)param;
@@ -60,19 +59,19 @@ void	*death_check(void *param)
 		continue ;
 	while (true)
 	{
-		i = 0;
-		while (i < game->nb_philo)
+		i = -1;
+		while (++i < game->nb_philo)
 		{
-			current_time = ft_get_time();
-			if (current_time - get_last_meal(&game->philos[i]) >= game->time_die)
+			if (ft_get_time()
+				- get_last_meal(&game->philos[i]) >= game->time_die)
 			{
 				set_dead(game, &game->philos[i]);
 				print_state(game, &game->philos[i], dead);
 				return (NULL);
 			}
-			if (game->nb_max_eat != -1 && get_nb_eat(game) == (int)game->nb_philo)
+			if (game->nb_max_eat != -1
+				&& get_nb_eat(game) == (int)game->nb_philo)
 				return (NULL);
-			i++;
 		}
 		usleep(100);
 	}

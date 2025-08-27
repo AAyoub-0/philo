@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/21 15:37:01 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:49:50 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	*philo_routine(void *param)
 {
 	t_game	*game;
 	t_philo	*philo;
-	
+
 	philo = (t_philo *)param;
 	game = philo->game;
 	while (ft_get_time() < game->start_time)
@@ -69,7 +69,8 @@ void	*philo_routine(void *param)
 	{
 		if (!philo_eat(game, philo))
 			break ;
-		if (game->nb_max_eat != -1 && (int)get_meals_eaten(philo) == game->nb_max_eat)
+		if (game->nb_max_eat != -1
+			&& (int)get_meals_eaten(philo) == game->nb_max_eat)
 		{
 			set_nb_eat(game, get_nb_eat(game) + 1);
 			break ;

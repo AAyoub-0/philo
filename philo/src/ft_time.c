@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:21:08 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/21 14:43:15 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:49:28 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 long	ft_get_time(void)
 {
 	struct timeval	tv;
+
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000L + tv.tv_usec / 1000L);
 }
@@ -30,5 +31,5 @@ void	ft_usleep(long delay)
 
 	start_time = ft_get_time();
 	while (ft_get_delay(start_time) < delay)
-		usleep(100); 
+		usleep(100);
 }

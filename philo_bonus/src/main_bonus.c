@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/26 19:29:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:57:32 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,6 @@ static void	setup(int ac, char **av, t_game *game)
 		game->nb_max_eat = (int)mini_atoi(av[5]);
 	else
 		game->nb_max_eat = -1;
-}
-
-sem_t	*sem_clean_open(t_game *game, const char *name, int value)
-{
-	sem_t	*sem;
-
-	sem_unlink(name);
-	sem = sem_open(name, O_CREAT | O_EXCL, 0644, value);
-	if (sem == SEM_FAILED)
-	{
-		perror("Semaphore initialization failed");
-		free_game(game);
-		exit(EXIT_FAILURE);
-	}
-	return (sem);
 }
 
 static void	init_game(t_game *game)

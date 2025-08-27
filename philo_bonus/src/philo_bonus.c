@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/26 19:35:44 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:56:43 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	*philo_routine(void *param)
 {
 	t_philo	*philo;
 	t_bool	done;
-	
+
 	philo = (t_philo *)param;
 	philo->last_meal = philo->game->start_time;
 	while (ft_get_time() < philo->game->start_time)
@@ -61,7 +61,7 @@ void	*philo_routine(void *param)
 	{
 		philo_eat(philo->game, philo, done);
 		if (!done && philo->game->nb_max_eat != -1
-				&& (int)get_meals_eaten(philo) == philo->game->nb_max_eat)
+			&& (int)get_meals_eaten(philo) == philo->game->nb_max_eat)
 		{
 			done = true;
 			sem_post(philo->game->nb_eat_sem);
@@ -82,8 +82,10 @@ void	init_philos(t_game *game)
 		game->philos[i].game = game;
 		game->philos[i].id = i + 1;
 		game->philos[i].meals_eaten = 0;
-		game->philos[i].meals_eaten_sem = sem_clean_open(game, MEALS_EATEN_SEM_NAME, 1);
-		game->philos[i].last_meal_sem = sem_clean_open(game, LAST_MEAL_SEM_NAME, 1);
+		game->philos[i].meals_eaten_sem = sem_clean_open(game,
+				MEALS_EATEN_SEM_NAME, 1);
+		game->philos[i].last_meal_sem = sem_clean_open(game, LAST_MEAL_SEM_NAME,
+				1);
 		game->philos[i].state_sem = sem_clean_open(game, STATE_SEM_NAME, 1);
 	}
 }

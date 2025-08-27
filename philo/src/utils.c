@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/21 16:29:10 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:49:53 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 {
-	size_t time;
+	size_t	time;
 
 	if (game->dead_printed)
 		return ;
@@ -37,7 +37,7 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 
 void	print_fork(t_game *game, t_philo *philo)
 {
-	size_t time;
+	size_t	time;
 
 	if (get_dead(game) != NULL)
 		return ;

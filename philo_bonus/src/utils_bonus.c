@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/26 19:46:24 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:57:40 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,32 @@ void	print_state(t_game *game, size_t id, t_philo_state state)
 	else if (state == sleeping)
 		printf("is  " BLUE "sleeping" RESET "\n");
 	else if (state == dead)
-		printf( BOLD "died" RESET "\n");
+		printf(BOLD "died" RESET "\n");
 	sem_post(game->print_sem);
 }
 
 void	print_fork(t_game *game, t_philo *philo)
 {
 	sem_wait(game->print_sem);
-	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(game->start_time), philo->id);
+	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(game->start_time),
+		philo->id);
 	printf("has " CYAN "taken a fork" RESET "\n");
 	sem_post(game->print_sem);
+}
+
+sem_t	*sem_clean_open(t_game *game, const char *name, int value)
+{
+	sem_t	*sem;
+
+	sem_unlink(name);
+	sem = sem_open(name, O_CREAT | O_EXCL, 0644, value);
+	if (sem == SEM_FAILED)
+	{
+		perror("Semaphore initialization failed");
+		free_game(game);
+		exit(EXIT_FAILURE);
+	}
+	return (sem);
 }
 
 size_t	mini_atoi(char *str)
