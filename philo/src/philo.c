@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 19:22:42 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:55:29 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_bool	philo_eat(t_game *game, t_philo *philo)
 	print_state(game, philo, eating);
 	set_last_meal(philo, ft_get_time());
 	set_meals_eaten(philo, get_meals_eaten(philo) + 1);
-	ft_usleep(game->time_eat);
+	ft_usleep(game, game->time_eat);
 	set_fork_used(&philo->fork, false);
 	set_fork_used(&philo->prev->fork, false);
 	return (true);
@@ -42,7 +42,7 @@ t_bool	philo_sleep_n_think(t_game *game, t_philo *philo)
 	if (get_dead(game) != NULL)
 		return (false);
 	print_state(game, philo, sleeping);
-	ft_usleep(game->time_sleep);
+	ft_usleep(game, game->time_sleep);
 	if (get_dead(game) != NULL)
 		return (false);
 	print_state(game, philo, thinking);
@@ -61,7 +61,7 @@ void	*philo_routine(void *param)
 	if (game->thread_crashed)
 		return (NULL);
 	if (philo->id % 2 == 0)
-		ft_usleep(game->time_eat / 2);
+		ft_usleep(game, game->time_eat / 2);
 	while (true)
 	{
 		if (!philo_eat(game, philo))

@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 16:06:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:58:15 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ size_t	mini_atoi(char *str)
 	result = 0;
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
+		if ((int)result > (INT_MAX - (str[i] - '0')) / 10)
+		{
+			printf("Error: integer too large\n");
+			exit(EXIT_FAILURE);
+		}
 		result = result * 10 + str[i] - '0';
 		i++;
 	}

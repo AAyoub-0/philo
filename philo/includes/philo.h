@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 19:20:22 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:57:30 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <limits.h>
 
 # define USAGE \
 	"Usage: ./philo <number_of_philosophers> <time_to_die>\
@@ -115,7 +116,7 @@ t_bool				get_fork_used(t_fork *fork);
 
 long				ft_get_time(void);
 long				ft_get_delay(long start_time);
-void				ft_usleep(long delay);
+void				ft_usleep(t_game *game, long delay);
 
 void				pthread_safe_philo(t_game *game, t_philo *philo);
 void				pthread_safe_death_thread(t_game *game);
