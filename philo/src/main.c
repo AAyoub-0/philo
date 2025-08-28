@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 21:02:23 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 18:29:18 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,14 @@ static void	init_game(t_game *game)
 	if (!game->philos)
 		exit(EXIT_FAILURE);
 	game->dead = NULL;
-	if (pthread_mutex_init(&game->print_lock, NULL) != 0)
-		msg_exit(game, "mutex init failure", 1);
-	if (pthread_mutex_init(&game->nb_eat_lock, NULL) != 0)
-		msg_exit(game, "mutex init failure", 1);
-	if (pthread_mutex_init(&game->dead_lock, NULL) != 0)
-		msg_exit(game, "mutex init failure", 1);
+	safe_mutex_init(game, &game->print_lock);
+	safe_mutex_init(game, &game->nb_eat_lock);
+	safe_mutex_init(game, &game->dead_lock);
 	game->dead_printed = false;
+	game->thread_crashed = false;
+	game->death_thread_created = true;
 	game->start_time = ft_get_time() + (game->nb_philo * 20);
 	init_philos(game);
-	pthread_create(&game->death_thread, NULL, death_check, game);
 }
 
 static void	start_game(t_game *game)
@@ -54,12 +52,19 @@ static void	start_game(t_game *game)
 	i = 0;
 	while (i < game->nb_philo)
 	{
-		if (pthread_join(game->philos[i].thread, NULL) != 0)
-			printf("thread failed to join\n");
+		pthread_safe_philo(game, &game->philos[i]);
 		i++;
 	}
-	if (pthread_join(game->death_thread, NULL) != 0)
-		printf("thread failed to join\n");
+	pthread_safe_death_thread(game);
+	i = 0;
+	while (i < game->nb_philo)
+	{
+		if (game->philos[i].thread_created)
+			pthread_safe_join(game, game->philos[i].thread);
+		i++;
+	}
+	if (game->death_thread_created)
+		pthread_safe_join(game, game->death_thread);
 }
 
 t_bool	check_args(int ac, char **av)

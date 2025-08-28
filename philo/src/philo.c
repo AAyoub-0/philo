@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 17:56:35 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 17:18:05 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,15 @@ t_bool	philo_eat(t_game *game, t_philo *philo)
 	return (true);
 }
 
-t_bool	philo_think(t_game *game, t_philo *philo)
-{
-	if (get_dead(game) != NULL)
-		return (false);
-	print_state(game, philo, thinking);
-	return (true);
-}
-
-t_bool	philo_sleep(t_game *game, t_philo *philo)
+t_bool	philo_sleep_n_think(t_game *game, t_philo *philo)
 {
 	if (get_dead(game) != NULL)
 		return (false);
 	print_state(game, philo, sleeping);
 	ft_usleep(game->time_sleep);
+	if (get_dead(game) != NULL)
+		return (false);
+	print_state(game, philo, thinking);
 	return (true);
 }
 
@@ -63,6 +58,8 @@ void	*philo_routine(void *param)
 	game = philo->game;
 	while (ft_get_time() < game->start_time)
 		continue ;
+	if (game->thread_crashed)
+		return (NULL);
 	if (philo->id % 2 == 0)
 		ft_usleep(game->time_eat / 2);
 	while (true)
@@ -75,9 +72,7 @@ void	*philo_routine(void *param)
 			set_nb_eat(game, get_nb_eat(game) + 1);
 			break ;
 		}
-		if (!philo_think(game, philo))
-			break ;
-		if (!philo_sleep(game, philo))
+		if (!philo_sleep_n_think(game, philo))
 			break ;
 	}
 	return (NULL);
@@ -94,9 +89,9 @@ void	init_philos(t_game *game)
 		game->philos[i].id = i + 1;
 		game->philos[i].meals_eaten = 0;
 		game->philos[i].last_meal = game->start_time;
-		pthread_mutex_init(&game->philos[i].fork.fork_lock, NULL);
-		pthread_mutex_init(&game->philos[i].meals_eaten_lock, NULL);
-		pthread_mutex_init(&game->philos[i].last_meal_lock, NULL);
+		safe_mutex_init(game, &game->philos[i].fork.fork_lock);
+		safe_mutex_init(game, &game->philos[i].meals_eaten_lock);
+		safe_mutex_init(game, &game->philos[i].last_meal_lock);
 		if (i > 0)
 			game->philos[i].prev = &game->philos[i - 1];
 		else
@@ -106,7 +101,6 @@ void	init_philos(t_game *game)
 			else
 				game->philos[i].prev = &game->philos[game->nb_philo - 1];
 		}
-		pthread_create(&game->philos[i].thread, NULL, philo_routine,
-			&game->philos[i]);
+		game->philos[i].thread_created = true;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 20:24:54 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 18:30:13 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_philo
 	size_t			meals_eaten;
 	size_t			last_meal;
 	t_fork			fork;
+	t_bool			thread_created;
 	struct s_philo	*prev;
 	pthread_mutex_t	meals_eaten_lock;
 	pthread_mutex_t	last_meal_lock;
@@ -85,12 +86,15 @@ typedef struct s_game
 	t_philo			*philos;
 	t_philo			*dead;
 	t_bool			dead_printed;
+	t_bool			death_thread_created;
+	t_bool			thread_crashed;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	nb_eat_lock;
 	pthread_mutex_t	dead_lock;
 	pthread_t		death_thread;
 }					t_game;
 
+void				*philo_routine(void *param);
 void				init_philos(t_game *game);
 
 void				*death_check(void *param);
@@ -112,6 +116,11 @@ t_bool				get_fork_used(t_fork *fork);
 long				ft_get_time(void);
 long				ft_get_delay(long start_time);
 void				ft_usleep(long delay);
+
+void				pthread_safe_philo(t_game *game, t_philo *philo);
+void				pthread_safe_death_thread(t_game *game);
+void				pthread_safe_join(t_game *game, pthread_t thread);
+void				safe_mutex_init(t_game *game, pthread_mutex_t *mutex);
 
 void				print_state(t_game *game, t_philo *philo,
 						t_philo_state state);

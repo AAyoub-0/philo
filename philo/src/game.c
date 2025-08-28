@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 21:04:01 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 17:13:40 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,40 @@ t_philo	*get_dead(t_game *game)
 	return (dead);
 }
 
+t_bool	is_dead(t_game *game)
+{
+	size_t	i;
+
+	i = -1;
+	while (++i < game->nb_philo)
+	{
+		if (ft_get_time()
+			- get_last_meal(&game->philos[i]) >= game->time_die)
+		{
+			set_dead(game, &game->philos[i]);
+			print_state(game, &game->philos[i], dead);
+			return (true);
+		}
+		if (game->nb_max_eat != -1
+			&& get_nb_eat(game) == (int)game->nb_philo)
+			return (true);
+	}
+	return (false);
+}
+
 void	*death_check(void *param)
 {
 	t_game	*game;
-	size_t	i;
 
 	game = (t_game *)param;
 	while (ft_get_time() < game->start_time)
 		continue ;
+	if (game->thread_crashed)
+		return (NULL);
 	while (true)
 	{
-		i = -1;
-		while (++i < game->nb_philo)
-		{
-			if (ft_get_time()
-				- get_last_meal(&game->philos[i]) >= game->time_die)
-			{
-				set_dead(game, &game->philos[i]);
-				print_state(game, &game->philos[i], dead);
-				return (NULL);
-			}
-			if (game->nb_max_eat != -1
-				&& get_nb_eat(game) == (int)game->nb_philo)
-				return (NULL);
-		}
+		if (is_dead(game))
+			return (NULL);
 		usleep(10);
 	}
 	return (NULL);

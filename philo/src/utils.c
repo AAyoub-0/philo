@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 20:24:37 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 16:06:50 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 		return ;
 	time = ft_get_delay(game->start_time);
 	pthread_mutex_lock(&game->print_lock);
+	if (get_dead(game) != NULL && state != dead)
+	{
+		pthread_mutex_unlock(&game->print_lock);
+		return ;
+	}
 	printf(GREEN "%zu" RESET " %zu ", time, philo->id);
 	if (state == thinking)
 		printf("is  " MAGENTA "thinking" RESET "\n");
@@ -43,6 +48,11 @@ void	print_fork(t_game *game, t_philo *philo)
 		return ;
 	time = ft_get_delay(game->start_time);
 	pthread_mutex_lock(&game->print_lock);
+	if (get_dead(game) != NULL)
+	{
+		pthread_mutex_unlock(&game->print_lock);
+		return ;
+	}
 	printf(GREEN "%zu" RESET " %zu ", time, philo->id);
 	printf("has " CYAN "taken a fork" RESET "\n");
 	pthread_mutex_unlock(&game->print_lock);
