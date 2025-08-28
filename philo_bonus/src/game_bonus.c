@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 19:45:27 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 18:54:41 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	*eat_check(void *param)
 		++meals_eaten;
 		if (meals_eaten >= game->nb_philo)
 		{
-			// free_game(game);
 			exit(EXIT_SUCCESS);
 		}
 	}
