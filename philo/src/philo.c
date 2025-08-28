@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 17:18:05 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:22:42 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,10 @@ void	init_philos(t_game *game)
 		safe_mutex_init(game, &game->philos[i].last_meal_lock);
 		if (i > 0)
 			game->philos[i].prev = &game->philos[i - 1];
+		else if (game->nb_philo == 1)
+			game->philos[i].prev = NULL;
 		else
-		{
-			if (game->nb_philo == 1)
-				game->philos[i].prev = NULL;
-			else
-				game->philos[i].prev = &game->philos[game->nb_philo - 1];
-		}
+			game->philos[i].prev = &game->philos[game->nb_philo - 1];
 		game->philos[i].thread_created = true;
 	}
 }

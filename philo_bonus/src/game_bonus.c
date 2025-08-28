@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 18:54:41 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:29:13 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	*death_check(void *param)
 			sem_wait(game->print_sem);
 			exit(EXIT_SUCCESS);
 		}
-		usleep(100);
+		usleep(10);
 	}
 	return (NULL);
 }

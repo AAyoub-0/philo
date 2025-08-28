@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 19:15:04 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:29:03 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ void	*philo_routine(void *param)
 	philo = (t_philo *)param;
 	philo->last_meal = philo->game->start_time;
 	while (ft_get_time() < philo->game->start_time)
-		usleep(100);
+		continue ;
 	pthread_create(&philo->death_thread, NULL, death_check, philo);
 	pthread_detach(philo->death_thread);
 	done = false;
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->game->time_eat * 0.2);
+		ft_usleep(philo->game->time_eat * 0.5);
 	while (true)
 	{
 		philo_eat(philo->game, philo, done);
