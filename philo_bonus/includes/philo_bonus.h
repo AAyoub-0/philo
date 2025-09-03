@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/27 16:56:23 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 23:11:42 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/time.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <limits.h>
 
 # define USAGE \
 	"Usage: ./philo <number_of_philosophers> <time_to_die>\

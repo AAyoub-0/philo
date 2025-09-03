@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 19:29:03 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/08/28 23:13:01 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	*philo_routine(void *param)
 		{
 			done = true;
 			sem_post(philo->game->nb_eat_sem);
+			exit(EXIT_SUCCESS);
 		}
 		philo_think(philo->game, philo, done);
 		philo_sleep(philo->game, philo, done);
