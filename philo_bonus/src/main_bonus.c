@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 23:13:36 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:07:51 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	init_game(t_game *game)
 	game->nb_eat_sem = sem_clean_open(game, NB_EAT_SEM_NAME, 0);
 	game->dead_sem = sem_clean_open(game, DEAD_SEM_NAME, 1);
 	game->forks_sem = sem_clean_open(game, FORKS_SEM_NAME, game->nb_philo);
-	game->start_time = ft_get_time() + (game->nb_philo * 20);
+	game->start_time = ft_get_time() + (game->nb_philo * 5);
 	pthread_create(&game->nb_eat_thread, NULL, eat_check, game);
 	init_philos(game);
 }

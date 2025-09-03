@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 23:13:01 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:11:08 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	*philo_routine(void *param)
 	pthread_detach(philo->death_thread);
 	done = false;
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->game->time_eat * 0.5);
+		ft_usleep(philo->game->time_eat * 0.2);
 	while (true)
 	{
 		philo_eat(philo->game, philo, done);
@@ -65,7 +65,7 @@ void	*philo_routine(void *param)
 		{
 			done = true;
 			sem_post(philo->game->nb_eat_sem);
-			exit(EXIT_SUCCESS);
+			// exit(EXIT_SUCCESS);
 		}
 		philo_think(philo->game, philo, done);
 		philo_sleep(philo->game, philo, done);
