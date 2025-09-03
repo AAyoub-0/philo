@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 22:55:29 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:00:11 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,15 @@ void	*philo_routine(void *param)
 	while (true)
 	{
 		if (!philo_eat(game, philo))
-			break ;
+			return (NULL);
 		if (game->nb_max_eat != -1
 			&& (int)get_meals_eaten(philo) == game->nb_max_eat)
 		{
 			set_nb_eat(game, get_nb_eat(game) + 1);
-			break ;
+			return (NULL);
 		}
 		if (!philo_sleep_n_think(game, philo))
-			break ;
+			return (NULL);
 	}
 	return (NULL);
 }
