@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/03 19:07:03 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/03 20:18:16 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ void	free_game(t_game *game)
 	{
 		if (game->philos[i].pid > 0)
 			kill(game->philos[i].pid, SIGKILL);
-		sem_clear(game->philos[i].meals_eaten_sem, MEALS_EATEN_SEM_NAME);
-		sem_clear(game->philos[i].last_meal_sem, LAST_MEAL_SEM_NAME);
-		sem_clear(game->philos[i].state_sem, STATE_SEM_NAME);
 		i++;
 	}
 	free(game->philos);
@@ -41,6 +38,9 @@ void	free_game(t_game *game)
 	sem_clear(game->nb_eat_sem, NB_EAT_SEM_NAME);
 	sem_clear(game->dead_sem, DEAD_SEM_NAME);
 	sem_clear(game->forks_sem, FORKS_SEM_NAME);
+	sem_clear(game->meals_eaten_sem, MEALS_EATEN_SEM_NAME);
+	sem_clear(game->last_meal_sem, LAST_MEAL_SEM_NAME);
+	sem_clear(game->state_sem, STATE_SEM_NAME);
 }
 
 void	*death_check(void *param)
@@ -54,7 +54,7 @@ void	*death_check(void *param)
 	while (true)
 	{
 		current_time = ft_get_time();
-		if (current_time - get_last_meal(philo) >= game->time_die)
+		if (current_time - get_last_meal(game, philo) >= game->time_die)
 		{
 			print_state(game, philo->id, dead);
 			sem_wait(game->print_sem);
@@ -78,7 +78,7 @@ void	*eat_check(void *param)
 		++meals_eaten;
 		if (meals_eaten >= game->nb_philo)
 		{
-			free_game(game);
+			// free_game(game);
 			exit(EXIT_SUCCESS);
 		}
 	}
