@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/03 20:18:16 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/04 12:55:58 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	free_game(t_game *game)
 	sem_clear(game->forks_sem, FORKS_SEM_NAME);
 	sem_clear(game->meals_eaten_sem, MEALS_EATEN_SEM_NAME);
 	sem_clear(game->last_meal_sem, LAST_MEAL_SEM_NAME);
-	sem_clear(game->state_sem, STATE_SEM_NAME);
 }
 
 void	*death_check(void *param)
@@ -57,7 +56,6 @@ void	*death_check(void *param)
 		if (current_time - get_last_meal(game, philo) >= game->time_die)
 		{
 			print_state(game, philo->id, dead);
-			sem_wait(game->print_sem);
 			exit(EXIT_SUCCESS);
 		}
 		usleep(10);

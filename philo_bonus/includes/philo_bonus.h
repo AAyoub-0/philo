@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/03 20:18:07 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/04 12:56:03 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@
 # define FORKS_SEM_NAME "forks_sem"
 # define MEALS_EATEN_SEM_NAME "meals_eaten_sem"
 # define LAST_MEAL_SEM_NAME "last_meal_sem"
-# define STATE_SEM_NAME "state_sem"
 
 typedef enum e_bool
 {
@@ -100,7 +99,6 @@ typedef struct s_game
 	sem_t			*end_sem;
 	sem_t			*meals_eaten_sem;
 	sem_t			*last_meal_sem;
-	sem_t			*state_sem;
 	pthread_t		nb_eat_thread;
 }					t_game;
 

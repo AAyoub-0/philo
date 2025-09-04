@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 23:11:47 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/04 12:52:25 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	print_state(t_game *game, size_t id, t_philo_state state)
 	else if (state == sleeping)
 		printf("is  " BLUE "sleeping" RESET "\n");
 	else if (state == dead)
+	{
 		printf(BOLD "died" RESET "\n");
+		return ;
+	}
 	sem_post(game->print_sem);
 }
 
