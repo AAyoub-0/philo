@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/04 12:56:03 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/12 14:49:04 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@
 
 # define PRINT_SEM_NAME "print_sem"
 # define NB_EAT_SEM_NAME "nb_eat_sem"
-# define DEAD_SEM_NAME "dead_sem"
-# define END_SEM_NAME "end_sem"
+# define END_SIM_SEM_NAME "end_sim_sem"
+# define PHILO_DEAD_SEM_NAME "philo_dead_sem"
 # define FORKS_SEM_NAME "forks_sem"
 # define MEALS_EATEN_SEM_NAME "meals_eaten_sem"
 # define LAST_MEAL_SEM_NAME "last_meal_sem"
@@ -81,6 +81,7 @@ typedef struct s_philo
 	int				nb_max_eat;
 	long			start_time;
 	pthread_t		death_thread;
+	pthread_t		end_sim_thread;
 }					t_philo;
 
 typedef struct s_game
@@ -91,12 +92,13 @@ typedef struct s_game
 	size_t			time_sleep;
 	int				nb_max_eat;
 	long			start_time;
+	t_bool			philo_dead;
 	t_philo			*philos;
 	sem_t			*print_sem;
 	sem_t			*nb_eat_sem;
-	sem_t			*dead_sem;
 	sem_t			*forks_sem;
-	sem_t			*end_sem;
+	sem_t			*end_sim_sem;
+	sem_t			*philo_dead_sem;
 	sem_t			*meals_eaten_sem;
 	sem_t			*last_meal_sem;
 	pthread_t		nb_eat_thread;
@@ -104,8 +106,9 @@ typedef struct s_game
 
 sem_t				*sem_clean_open(t_game *game, const char *name, int value);
 
+void				free_philo(t_game *game);
 void				init_philos(t_game *game);
-void				*philo_routine(void *param);
+void				philo_routine(t_philo *philo, t_game *game);
 
 void				*death_check(void *param);
 void				*eat_check(void *param);
@@ -113,10 +116,12 @@ void				free_game(t_game *game);
 
 void				set_meals_eaten(t_game *game, t_philo *philo, size_t meals);
 void				set_last_meal(t_game *game, t_philo *philo, size_t last_meal);
+void				set_philo_dead(t_game *game, t_bool philo_dead);
 
 int					get_nb_eat(t_game *game);
 size_t				get_meals_eaten(t_game *game, t_philo *philo);
 size_t				get_last_meal(t_game *game, t_philo *philo);
+t_bool				get_philo_dead(t_game *game);
 
 long				ft_get_time(void);
 long				ft_get_delay(long start_time);

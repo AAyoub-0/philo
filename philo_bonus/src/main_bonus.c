@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/04 12:55:55 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/12 14:48:46 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,16 @@ static void	init_game(t_game *game)
 	game->philos = malloc(sizeof(t_philo) * game->nb_philo);
 	if (!game->philos)
 		exit(EXIT_FAILURE);
+	game->philo_dead = false;
 	game->print_sem = sem_clean_open(game, PRINT_SEM_NAME, 1);
 	game->nb_eat_sem = sem_clean_open(game, NB_EAT_SEM_NAME, 0);
-	game->dead_sem = sem_clean_open(game, DEAD_SEM_NAME, 1);
+	game->end_sim_sem = sem_clean_open(game, END_SIM_SEM_NAME, 0);
+	game->philo_dead_sem = sem_clean_open(game, PHILO_DEAD_SEM_NAME, 1);
 	game->forks_sem = sem_clean_open(game, FORKS_SEM_NAME, game->nb_philo);
-	game->nb_eat_sem = sem_clean_open(game, END_SEM_NAME, 0);
-	game->start_time = ft_get_time() + (game->nb_philo * 5);
-	game->meals_eaten_sem = sem_clean_open(game, MEALS_EATEN_SEM_NAME,
-			1);
+	game->nb_eat_sem = sem_clean_open(game, END_SIM_SEM_NAME, 1);
+	game->meals_eaten_sem = sem_clean_open(game, MEALS_EATEN_SEM_NAME, 1);
 	game->last_meal_sem = sem_clean_open(game, LAST_MEAL_SEM_NAME, 1);
+	game->start_time = ft_get_time() + (game->nb_philo * 20);
 	pthread_create(&game->nb_eat_thread, NULL, eat_check, game);
 	init_philos(game);
 }
@@ -45,9 +46,9 @@ static void	init_game(t_game *game)
 static void	start_game(t_game *game)
 {
 	size_t	i;
+	int		status;
 
 	i = 0;
-	pthread_detach(game->nb_eat_thread);
 	while (i < game->nb_philo)
 	{
 		game->philos[i].pid = fork();
@@ -58,10 +59,12 @@ static void	start_game(t_game *game)
 			exit(EXIT_FAILURE);
 		}
 		if (game->philos[i].pid == 0)
-			philo_routine(&game->philos[i]);
+			philo_routine(&game->philos[i], game);
 		i++;
 	}
-	waitpid(-1, NULL, 0);
+	waitpid(-1, &status, 0);
+	sem_post(game->nb_eat_sem);
+	pthread_join(game->nb_eat_thread, NULL);
 }
 
 t_bool	check_args(int ac, char **av)
