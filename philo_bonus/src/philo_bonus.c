@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/12 15:07:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/21 23:17:30 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 void	philo_eat(t_game *game, t_philo *philo)
 {
+	if (get_philo_dead(game) == true)
+		return ;
 	sem_wait(game->forks_sem);
 	print_fork(game, philo);
+	if (get_philo_dead(game) == true)
+	{
+		sem_post(game->forks_sem);
+		return ;
+	}
 	sem_wait(game->forks_sem);
 	print_fork(game, philo);
 	print_state(game, philo->id, eating);
@@ -28,11 +35,15 @@ void	philo_eat(t_game *game, t_philo *philo)
 
 void	philo_think(t_game *game, t_philo *philo)
 {
+	if (get_philo_dead(game) == true)
+		return ;
 	print_state(game, philo->id, thinking);
 }
 
 void	philo_sleep(t_game *game, t_philo *philo)
 {
+	if (get_philo_dead(game) == true)
+		return ;
 	print_state(game, philo->id, sleeping);
 	ft_usleep(philo->time_sleep);
 }
@@ -79,9 +90,6 @@ void	*end_sim_check(void *param)
 	game = (t_game *)param;
 	sem_wait(game->end_sim_sem);
 	set_philo_dead(game, true);
-	// sem_wait(game->print_sem);
-	// free_philo(game);
-	// exit(EXIT_SUCCESS);
 	return (NULL);
 }
 
@@ -93,9 +101,11 @@ void	philo_routine(t_philo *philo, t_game *game)
 	pthread_create(&philo->end_sim_thread, NULL, end_sim_check, game);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->time_eat * 0.2);
-	while (true)
+	while (get_philo_dead(game) == false)
 	{
 		philo_eat(game, philo);
+		if (get_philo_dead(game) == true)
+			break ;
 		if (philo->nb_max_eat != -1 && (int)get_meals_eaten(game,
 				philo) == philo->nb_max_eat)
 		{
@@ -123,6 +133,7 @@ void	init_philos(t_game *game)
 		philos[i].id = i + 1;
 		philos[i].game = game;
 		philos[i].start_time = game->start_time;
+		philos[i].last_meal = game->start_time;
 		philos[i].time_die = game->time_die;
 		philos[i].time_eat = game->time_eat;
 		philos[i].time_sleep = game->time_sleep;

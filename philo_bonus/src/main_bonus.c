@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/12 14:48:46 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/21 23:16:42 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,11 @@ static void	init_game(t_game *game)
 	game->philo_dead = false;
 	game->print_sem = sem_clean_open(game, PRINT_SEM_NAME, 1);
 	game->nb_eat_sem = sem_clean_open(game, NB_EAT_SEM_NAME, 0);
-	game->end_sim_sem = sem_clean_open(game, END_SIM_SEM_NAME, 0);
 	game->philo_dead_sem = sem_clean_open(game, PHILO_DEAD_SEM_NAME, 1);
 	game->forks_sem = sem_clean_open(game, FORKS_SEM_NAME, game->nb_philo);
-	game->nb_eat_sem = sem_clean_open(game, END_SIM_SEM_NAME, 1);
 	game->meals_eaten_sem = sem_clean_open(game, MEALS_EATEN_SEM_NAME, 1);
 	game->last_meal_sem = sem_clean_open(game, LAST_MEAL_SEM_NAME, 1);
+	game->end_sim_sem = sem_clean_open(game, END_SIM_SEM_NAME, 0);
 	game->start_time = ft_get_time() + (game->nb_philo * 20);
 	pthread_create(&game->nb_eat_thread, NULL, eat_check, game);
 	init_philos(game);
@@ -62,7 +61,9 @@ static void	start_game(t_game *game)
 			philo_routine(&game->philos[i], game);
 		i++;
 	}
-	waitpid(-1, &status, 0);
+	while (waitpid(-1, &status, 0) > 0);
+	printf("All philosophers have finished eating or a philosopher has died.\n");
+	set_philo_dead(game, true);
 	sem_post(game->nb_eat_sem);
 	pthread_join(game->nb_eat_thread, NULL);
 }

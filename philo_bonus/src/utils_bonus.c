@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/12 15:01:12 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/21 23:20:47 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	print_state(t_game *game, size_t id, t_philo_state state)
 {
+	if (get_philo_dead(game) == true && state != dead)
+		return ;
 	sem_wait(game->print_sem);
 	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(game->start_time), id);
 	if (state == thinking)
@@ -23,11 +25,7 @@ void	print_state(t_game *game, size_t id, t_philo_state state)
 	else if (state == sleeping)
 		printf("is  " BLUE "sleeping" RESET "\n");
 	else if (state == dead)
-	{
 		printf(BOLD "died" RESET "\n");
-	}
-	else
-		printf(BOLD "NOTHING" RESET "\n");
 	sem_post(game->print_sem);
 }
 
