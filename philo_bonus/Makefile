@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+         #
+#    By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/25 16:29:40 by aboumall          #+#    #+#              #
-#    Updated: 2025/09/04 12:53:20 by aboumall         ###   ########.fr        #
+#    Updated: 2025/09/24 14:32:19 by aboumall         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,14 @@ HEAD 	= includes/philo_bonus.h
 
 CC 		= cc
 
-CFLAGS 	= -Werror -Wextra -Wall -Iincludes -std=gnu11 -g3
+CFLAGS 	= -Werror -Wextra -Wall -Iincludes
 
 SRC_DIR 	= 	src
 OBJ_DIR 	= 	obj
 
 SRC_SRC 	= 	ft_time_bonus.c game_bonus.c philo_bonus.c \
-				philo_utils_bonus.c utils_bonus.c main_bonus.c
+				philo_utils_bonus.c utils_bonus.c main_bonus.c \
+				philo_thread_bonus.c
 
 SRC 		= 	$(addprefix $(SRC_DIR)/, $(SRC_SRC))
 				

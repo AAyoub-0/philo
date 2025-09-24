@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/21 23:17:30 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 14:24:45 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 
 void	philo_eat(t_game *game, t_philo *philo)
 {
-	if (get_philo_dead(game) == true)
-		return ;
 	sem_wait(game->forks_sem);
 	print_fork(game, philo);
-	if (get_philo_dead(game) == true)
+	if (game->nb_philo == 1)
 	{
-		sem_post(game->forks_sem);
-		return ;
+		while (get_philo_dead(game) == false)
+			usleep(100);
 	}
+	usleep(500);
 	sem_wait(game->forks_sem);
 	print_fork(game, philo);
 	print_state(game, philo->id, eating);
@@ -35,85 +34,35 @@ void	philo_eat(t_game *game, t_philo *philo)
 
 void	philo_think(t_game *game, t_philo *philo)
 {
-	if (get_philo_dead(game) == true)
-		return ;
 	print_state(game, philo->id, thinking);
 }
 
 void	philo_sleep(t_game *game, t_philo *philo)
 {
-	if (get_philo_dead(game) == true)
-		return ;
 	print_state(game, philo->id, sleeping);
 	ft_usleep(philo->time_sleep);
-}
-
-void	free_philo(t_game *game)
-{
-	if (game->print_sem)
-		sem_close(game->print_sem);
-	if (game->nb_eat_sem)
-		sem_close(game->nb_eat_sem);
-	if (game->philo_dead_sem)
-		sem_close(game->philo_dead_sem);
-	if (game->forks_sem)
-		sem_close(game->forks_sem);
-	if (game->meals_eaten_sem)
-		sem_close(game->meals_eaten_sem);
-	if (game->last_meal_sem)
-		sem_close(game->last_meal_sem);
-	if (game->end_sim_sem)
-		sem_close(game->end_sim_sem);
-}
-
-void	set_philo_dead(t_game *game, t_bool philo_dead)
-{
-	sem_wait(game->philo_dead_sem);
-	game->philo_dead = philo_dead;
-	sem_post(game->philo_dead_sem);
-}
-
-t_bool	get_philo_dead(t_game *game)
-{
-	t_bool	philo_dead;
-	
-	sem_wait(game->philo_dead_sem);
-	philo_dead = game->philo_dead;
-	sem_post(game->philo_dead_sem);
-	return (philo_dead);
-}
-
-void	*end_sim_check(void *param)
-{
-	t_game	*game;
-
-	game = (t_game *)param;
-	sem_wait(game->end_sim_sem);
-	set_philo_dead(game, true);
-	return (NULL);
 }
 
 void	philo_routine(t_philo *philo, t_game *game)
 {
 	while (ft_get_time() < philo->start_time)
-		continue ;
+		usleep(100);
 	pthread_create(&philo->death_thread, NULL, death_check, philo);
 	pthread_create(&philo->end_sim_thread, NULL, end_sim_check, game);
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->time_eat * 0.2);
+		ft_usleep(philo->time_eat / 2);
 	while (get_philo_dead(game) == false)
 	{
 		philo_eat(game, philo);
-		if (get_philo_dead(game) == true)
-			break ;
 		if (philo->nb_max_eat != -1 && (int)get_meals_eaten(game,
 				philo) == philo->nb_max_eat)
 		{
 			sem_post(game->nb_eat_sem);
 			break ;
 		}
-		philo_think(game, philo);
 		philo_sleep(game, philo);
+		philo_think(game, philo);
+		usleep(100);
 	}
 	pthread_join(philo->death_thread, NULL);
 	pthread_join(philo->end_sim_thread, NULL);

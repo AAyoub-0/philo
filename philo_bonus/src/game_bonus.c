@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/21 23:20:05 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 14:19:25 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	*death_check(void *param)
 			while (i < game->nb_philo)
 			{
 				sem_post(game->end_sim_sem);
-				i++;				
+				i++;
 			}
 			return (NULL);
 		}
-		usleep(10);
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -82,7 +82,7 @@ void	*eat_check(void *param)
 			while (i < game->nb_philo)
 			{
 				sem_post(game->end_sim_sem);
-				i++;				
+				i++;
 			}
 			return (NULL);
 		}

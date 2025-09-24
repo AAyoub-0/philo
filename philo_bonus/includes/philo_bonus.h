@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/12 14:49:04 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 14:25:23 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILO_BONUS_H
 
 # include <fcntl.h>
+# include <limits.h>
 # include <pthread.h>
 # include <semaphore.h>
 # include <signal.h>
@@ -22,7 +23,6 @@
 # include <sys/time.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <limits.h>
 
 # define USAGE \
 	"Usage: ./philo <number_of_philosophers> <time_to_die>\
@@ -110,12 +110,15 @@ void				free_philo(t_game *game);
 void				init_philos(t_game *game);
 void				philo_routine(t_philo *philo, t_game *game);
 
+void				*end_sim_check(void *param);
+
 void				*death_check(void *param);
 void				*eat_check(void *param);
 void				free_game(t_game *game);
 
 void				set_meals_eaten(t_game *game, t_philo *philo, size_t meals);
-void				set_last_meal(t_game *game, t_philo *philo, size_t last_meal);
+void				set_last_meal(t_game *game, t_philo *philo,
+						size_t last_meal);
 void				set_philo_dead(t_game *game, t_bool philo_dead);
 
 int					get_nb_eat(t_game *game);

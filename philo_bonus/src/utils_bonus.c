@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/21 23:20:47 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:30:17 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	print_state(t_game *game, size_t id, t_philo_state state)
 
 void	print_fork(t_game *game, t_philo *philo)
 {
+	if (get_philo_dead(game) == true)
+		return ;
 	sem_wait(game->print_sem);
 	printf(GREEN "%zu" RESET " %zu ", ft_get_delay(game->start_time),
 		philo->id);

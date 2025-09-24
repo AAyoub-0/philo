@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/21 23:16:42 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 14:19:32 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,23 @@
 static void	setup(int ac, char **av, t_game *game)
 {
 	game->nb_philo = mini_atoi(av[1]);
+	if (game->nb_philo == 0)
+		exit(EXIT_FAILURE);
 	game->time_die = mini_atoi(av[2]);
+	if (game->time_die == 0)
+		exit(EXIT_FAILURE);
 	game->time_eat = mini_atoi(av[3]);
+	if (game->time_eat == 0)
+		exit(EXIT_FAILURE);
 	game->time_sleep = mini_atoi(av[4]);
+	if (game->time_sleep == 0)
+		exit(EXIT_FAILURE);
 	if (ac == 6)
 		game->nb_max_eat = (int)mini_atoi(av[5]);
 	else
 		game->nb_max_eat = -1;
+	if (game->nb_max_eat == 0)
+		exit(EXIT_FAILURE);
 }
 
 static void	init_game(t_game *game)
@@ -44,25 +54,28 @@ static void	init_game(t_game *game)
 
 static void	start_game(t_game *game)
 {
-	size_t	i;
-	int		status;
+	int	i;
 
 	i = 0;
-	while (i < game->nb_philo)
+	while (i < (int)game->nb_philo)
 	{
 		game->philos[i].pid = fork();
 		if (game->philos[i].pid < 0)
 		{
 			perror("Fork failed");
-			free_game(game);
-			exit(EXIT_FAILURE);
+			while (i >= 0)
+			{
+				sem_post(game->end_sim_sem);
+				i--;
+			}
+			break ;
 		}
 		if (game->philos[i].pid == 0)
 			philo_routine(&game->philos[i], game);
 		i++;
 	}
-	while (waitpid(-1, &status, 0) > 0);
-	printf("All philosophers have finished eating or a philosopher has died.\n");
+	while (waitpid(-1, NULL, 0) > 0)
+		;
 	set_philo_dead(game, true);
 	sem_post(game->nb_eat_sem);
 	pthread_join(game->nb_eat_thread, NULL);
@@ -103,6 +116,8 @@ int	main(int ac, char **av)
 		return (2);
 	}
 	setup(ac, av, &game);
+	if (game.nb_max_eat == 0)
+		return (0);
 	init_game(&game);
 	start_game(&game);
 	free_game(&game);

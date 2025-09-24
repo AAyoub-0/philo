@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 10:31:47 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 14:07:07 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,22 @@ static void	setup(int ac, char **av, t_game *game)
 {
 	game->nb_philo = mini_atoi(av[1]);
 	if (game->nb_philo == 0)
-	{
-		printf(ERROR);
 		exit(EXIT_FAILURE);
-	}
 	game->time_die = mini_atoi(av[2]);
+	if (game->time_die == 0)
+		exit(EXIT_FAILURE);
 	game->time_eat = mini_atoi(av[3]);
+	if (game->time_eat == 0)
+		exit(EXIT_FAILURE);
 	game->time_sleep = mini_atoi(av[4]);
+	if (game->time_sleep == 0)
+		exit(EXIT_FAILURE);
 	if (ac == 6)
 		game->nb_max_eat = (int)mini_atoi(av[5]);
 	else
 		game->nb_max_eat = -1;
+	if (game->nb_max_eat == 0)
+		exit(EXIT_FAILURE);
 }
 
 static void	init_game(t_game *game)
@@ -78,7 +83,7 @@ t_bool	check_args(int ac, char **av)
 		j = 0;
 		while (av[i][j])
 		{
-			if (!is_digit(av[i][j]))
+			if (!ft_isdigit(av[i][j]))
 				return (false);
 			j++;
 		}
@@ -102,8 +107,6 @@ int	main(int ac, char **av)
 		return (2);
 	}
 	setup(ac, av, &game);
-	if (game.nb_max_eat == 0)
-		return (0);
 	init_game(&game);
 	start_game(&game);
 	free_game(&game);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 22:58:15 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:57:38 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ size_t	mini_atoi(char *str)
 	return (result);
 }
 
-t_bool	is_digit(char c)
+t_bool	ft_isdigit(char c)
 {
 	return (c >= '0' && c <= '9');
 }

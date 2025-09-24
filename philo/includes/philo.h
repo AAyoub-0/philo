@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 10:36:08 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 13:58:07 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,6 @@ void				print_state(t_game *game, t_philo *philo,
 void				print_fork(t_game *game, t_philo *philo);
 void				msg_exit(t_game *game, char *msg, int code);
 size_t				mini_atoi(char *str);
-t_bool				is_digit(char c);
+t_bool				ft_isdigit(char c);
 
 #endif
