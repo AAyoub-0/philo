@@ -25,15 +25,11 @@ long	ft_get_delay(long start_time)
 	return (ft_get_time() - start_time);
 }
 
-void	ft_usleep(t_game *game, long delay)
+void	ft_usleep(long delay)
 {
 	long	start_time;
 
 	start_time = ft_get_time();
 	while (ft_get_delay(start_time) < delay)
-	{
-		if (get_dead(game) != NULL)
-			return ;
-		usleep(10);
-	}
+		usleep(500);
 }

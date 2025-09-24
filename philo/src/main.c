@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 19:21:15 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:31:47 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	init_game(t_game *game)
 	game->dead_printed = false;
 	game->thread_crashed = false;
 	game->death_thread_created = true;
-	game->start_time = ft_get_time() + (game->nb_philo * 20);
+	game->start_time = ft_get_time() + (game->nb_philo * 5);
 	init_philos(game);
 }
 

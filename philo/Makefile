@@ -6,7 +6,7 @@
 #    By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/25 16:29:40 by aboumall          #+#    #+#              #
-#    Updated: 2025/08/28 18:18:45 by aboumall         ###   ########.fr        #
+#    Updated: 2025/09/24 10:42:48 by aboumall         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ HEAD 	= includes/philo.h
 
 CC 		= cc
 
-CFLAGS 	= -Werror -Wextra -Wall -Iincludes -std=gnu11 -g
+CFLAGS 	= -Werror -Wextra -Wall -Iincludes
 
 SRC_DIR 	= 	src
 OBJ_DIR 	= 	obj

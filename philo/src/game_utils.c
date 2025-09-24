@@ -6,27 +6,27 @@
 /*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:35:40 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 16:05:13 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:38:19 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	set_nb_eat(t_game *game, int nb_eat)
+void	set_dead(t_game *game, t_philo *philo)
 {
-	pthread_mutex_lock(&game->nb_eat_lock);
-	game->nb_eat = nb_eat;
-	pthread_mutex_unlock(&game->nb_eat_lock);
+	pthread_mutex_lock(&game->dead_lock);
+	game->dead = philo;
+	pthread_mutex_unlock(&game->dead_lock);
 }
 
-int	get_nb_eat(t_game *game)
+t_philo	*get_dead(t_game *game)
 {
-	int	nb_eat;
+	t_philo	*dead;
 
-	pthread_mutex_lock(&game->nb_eat_lock);
-	nb_eat = game->nb_eat;
-	pthread_mutex_unlock(&game->nb_eat_lock);
-	return (nb_eat);
+	pthread_mutex_lock(&game->dead_lock);
+	dead = game->dead;
+	pthread_mutex_unlock(&game->dead_lock);
+	return (dead);
 }
 
 void	set_fork_used(t_fork *fork, t_bool used)
