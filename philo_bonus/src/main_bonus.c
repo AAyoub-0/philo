@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 14:19:32 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/24 14:43:51 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	init_game(t_game *game)
 	game->meals_eaten_sem = sem_clean_open(game, MEALS_EATEN_SEM_NAME, 1);
 	game->last_meal_sem = sem_clean_open(game, LAST_MEAL_SEM_NAME, 1);
 	game->end_sim_sem = sem_clean_open(game, END_SIM_SEM_NAME, 0);
-	game->start_time = ft_get_time() + (game->nb_philo * 20);
+	game->start_time = ft_get_time() + (game->nb_philo * 5);
 	pthread_create(&game->nb_eat_thread, NULL, eat_check, game);
 	init_philos(game);
 }
