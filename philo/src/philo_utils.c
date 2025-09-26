@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:39:42 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 10:39:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/25 23:56:17 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,35 @@
 
 void	set_meals_eaten(t_philo *philo, size_t meals)
 {
-	pthread_mutex_lock(&philo->meals_eaten_lock);
+	pthread_mutex_lock(&philo->meals_eaten_lock.mutex);
 	philo->meals_eaten = meals;
-	pthread_mutex_unlock(&philo->meals_eaten_lock);
+	pthread_mutex_unlock(&philo->meals_eaten_lock.mutex);
 }
 
 size_t	get_meals_eaten(t_philo *philo)
 {
 	size_t	meals;
 
-	pthread_mutex_lock(&philo->meals_eaten_lock);
+	pthread_mutex_lock(&philo->meals_eaten_lock.mutex);
 	meals = philo->meals_eaten;
-	pthread_mutex_unlock(&philo->meals_eaten_lock);
+	pthread_mutex_unlock(&philo->meals_eaten_lock.mutex);
 	return (meals);
 }
 
 void	set_last_meal(t_philo *philo, size_t last_meal)
 {
-	pthread_mutex_lock(&philo->last_meal_lock);
+	pthread_mutex_lock(&philo->last_meal_lock.mutex);
 	philo->last_meal = last_meal;
-	pthread_mutex_unlock(&philo->last_meal_lock);
+	pthread_mutex_unlock(&philo->last_meal_lock.mutex);
 }
 
 size_t	get_last_meal(t_philo *philo)
 {
 	size_t	last_meal;
 
-	pthread_mutex_lock(&philo->last_meal_lock);
+	pthread_mutex_lock(&philo->last_meal_lock.mutex);
 	last_meal = philo->last_meal;
-	pthread_mutex_unlock(&philo->last_meal_lock);
+	pthread_mutex_unlock(&philo->last_meal_lock.mutex);
 	return (last_meal);
 }
 

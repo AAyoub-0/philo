@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 10:38:22 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/26 01:09:54 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ void	free_game(t_game *game)
 	i = 0;
 	while (i < game->nb_philo)
 	{
-		pthread_mutex_destroy(&game->philos[i].fork.fork_lock);
-		pthread_mutex_destroy(&game->philos[i].meals_eaten_lock);
-		pthread_mutex_destroy(&game->philos[i].last_meal_lock);
-		pthread_mutex_destroy(&game->philos[i].done_lock);
+		safe_mutex_destroy(&game->philos[i].fork.fork_lock);
+		safe_mutex_destroy(&game->philos[i].meals_eaten_lock);
+		safe_mutex_destroy(&game->philos[i].last_meal_lock);
+		safe_mutex_destroy(&game->philos[i].done_lock);
 		i++;
 	}
 	free(game->philos);
 	game->philos = NULL;
-	pthread_mutex_destroy(&game->print_lock);
-	pthread_mutex_destroy(&game->dead_lock);
-	pthread_mutex_destroy(&game->nb_eat_lock);
+	safe_mutex_destroy(&game->print_lock);
+	safe_mutex_destroy(&game->dead_lock);
+	safe_mutex_destroy(&game->nb_eat_lock);
 	game->dead = NULL;
 }
 
@@ -44,6 +44,7 @@ t_bool	check_all_done(t_game *game)
 			return (false);
 		usleep(100);
 	}
+	set_dead(game, &game->philos[i]);
 	return (true);
 }
 

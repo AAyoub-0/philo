@@ -6,19 +6,19 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 13:58:07 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/26 01:05:39 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <limits.h>
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
-# include <limits.h>
 
 # define USAGE \
 	"Usage: ./philo <number_of_philosophers> <time_to_die>\
@@ -46,6 +46,12 @@ typedef enum e_bool
 	false = 0
 }					t_bool;
 
+typedef struct s_mutex
+{
+	pthread_mutex_t	mutex;
+	t_bool			created;
+}					t_mutex;
+
 typedef enum e_philo_state
 {
 	eating,
@@ -58,7 +64,7 @@ typedef enum e_philo_state
 typedef struct s_fork
 {
 	t_bool			used;
-	pthread_mutex_t	fork_lock;
+	t_mutex			fork_lock;
 }					t_fork;
 
 typedef struct s_philo
@@ -71,9 +77,9 @@ typedef struct s_philo
 	t_bool			thread_created;
 	t_bool			done;
 	struct s_philo	*prev;
-	pthread_mutex_t	meals_eaten_lock;
-	pthread_mutex_t	last_meal_lock;
-	pthread_mutex_t	done_lock;
+	t_mutex			meals_eaten_lock;
+	t_mutex			last_meal_lock;
+	t_mutex			done_lock;
 	struct s_game	*game;
 }					t_philo;
 
@@ -91,9 +97,9 @@ typedef struct s_game
 	t_bool			dead_printed;
 	t_bool			death_thread_created;
 	t_bool			thread_crashed;
-	pthread_mutex_t	print_lock;
-	pthread_mutex_t	nb_eat_lock;
-	pthread_mutex_t	dead_lock;
+	t_mutex			print_lock;
+	t_mutex			nb_eat_lock;
+	t_mutex			dead_lock;
 	pthread_t		death_thread;
 }					t_game;
 
@@ -108,13 +114,15 @@ void				set_meals_eaten(t_philo *philo, size_t meals);
 void				set_last_meal(t_philo *philo, size_t last_meal);
 void				set_dead(t_game *game, t_philo *philo);
 void				set_fork_used(t_fork *fork, t_bool used);
-void				set_done(t_philo *philo, t_bool done);
+void				set_done(t_game *game, t_philo *philo, t_bool done);
+void				set_nb_eat(t_game *game, int nb_eat);
 
 size_t				get_meals_eaten(t_philo *philo);
 size_t				get_last_meal(t_philo *philo);
 t_philo				*get_dead(t_game *game);
 t_bool				get_fork_used(t_fork *fork);
 t_bool				get_done(t_philo *philo);
+size_t				get_nb_eat(t_game *game);
 
 long				ft_get_time(void);
 long				ft_get_delay(long start_time);
@@ -122,8 +130,8 @@ void				ft_usleep(long delay);
 
 void				pthread_safe_philo(t_game *game, t_philo *philo);
 void				pthread_safe_death_thread(t_game *game);
-void				pthread_safe_join(t_game *game, pthread_t thread);
-void				safe_mutex_init(t_game *game, pthread_mutex_t *mutex);
+void				safe_mutex_init(t_game *game, t_mutex *mutex);
+void				safe_mutex_destroy(t_mutex *mutex);
 
 void				print_state(t_game *game, t_philo *philo,
 						t_philo_state state);

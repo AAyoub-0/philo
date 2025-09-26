@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 14:07:07 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/26 00:04:21 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	init_game(t_game *game)
 	game->thread_crashed = false;
 	game->death_thread_created = true;
 	game->start_time = ft_get_time() + (game->nb_philo * 5);
+	game->nb_eat = 0;
 	init_philos(game);
 }
 
@@ -65,11 +66,11 @@ static void	start_game(t_game *game)
 	while (i < game->nb_philo)
 	{
 		if (game->philos[i].thread_created)
-			pthread_safe_join(game, game->philos[i].thread);
+			pthread_join(game->philos[i].thread, NULL);
 		i++;
 	}
 	if (game->death_thread_created)
-		pthread_safe_join(game, game->death_thread);
+		pthread_join(game->death_thread, NULL);
 }
 
 t_bool	check_args(int ac, char **av)

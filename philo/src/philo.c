@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 10:40:49 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/26 01:08:52 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,31 +68,31 @@ void	*philo_routine(void *param)
 	{
 		if (!philo_eat(game, philo))
 			return (NULL);
-		if (game->nb_max_eat != -1
+		if (!get_done(philo) && game->nb_max_eat != -1
 			&& (int)get_meals_eaten(philo) == game->nb_max_eat)
-		{
-			set_done(philo, true);
-			return (NULL);
-		}
+			set_done(game, philo, true);
 		if (!philo_sleep_n_think(game, philo))
+			return (NULL);
+		if (get_done(philo) && get_nb_eat(game) >= game->nb_philo - 1)
 			return (NULL);
 	}
 	return (NULL);
 }
 
-void	set_done(t_philo *philo, t_bool done)
+void	set_done(t_game *game, t_philo *philo, t_bool done)
 {
-	pthread_mutex_lock(&philo->done_lock);
+	pthread_mutex_lock(&philo->done_lock.mutex);
 	philo->done = done;
-	pthread_mutex_unlock(&philo->done_lock);
+	pthread_mutex_unlock(&philo->done_lock.mutex);
+	set_nb_eat(game, get_nb_eat(game) + 1);
 }
 
 t_bool	get_done(t_philo *philo)
 {
 	t_bool	done;
 
-	pthread_mutex_lock(&philo->done_lock);
+	pthread_mutex_lock(&philo->done_lock.mutex);
 	done = philo->done;
-	pthread_mutex_unlock(&philo->done_lock);
+	pthread_mutex_unlock(&philo->done_lock.mutex);
 	return (done);
 }

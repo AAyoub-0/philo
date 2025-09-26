@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_threads.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboumall <aboumall@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:22:19 by aboumall          #+#    #+#             */
-/*   Updated: 2025/08/28 19:04:37 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/25 23:53:25 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,18 @@ void	pthread_safe_death_thread(t_game *game)
 	}
 }
 
-void	pthread_safe_join(t_game *game, pthread_t thread)
+void	safe_mutex_init(t_game *game, t_mutex *mutex)
 {
-	if (pthread_join(thread, NULL) != 0)
+	if (pthread_mutex_init(&mutex->mutex, NULL) != 0)
 	{
-		game->thread_crashed = true;
-		printf("thread failed to join\n");
+		msg_exit(game, "mutex init failure", 1);
+		mutex->created = false;
 	}
+	mutex->created = true;
 }
 
-void	safe_mutex_init(t_game *game, pthread_mutex_t *mutex)
+void	safe_mutex_destroy(t_mutex *mutex)
 {
-	if (pthread_mutex_init(mutex, NULL) != 0)
-		msg_exit(game, "mutex init failure", 1);
+	if (mutex->created == true)
+		pthread_mutex_destroy(&mutex->mutex);
 }

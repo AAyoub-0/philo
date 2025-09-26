@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 13:57:38 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/25 23:57:13 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 	if (game->dead_printed)
 		return ;
 	time = ft_get_delay(game->start_time);
-	pthread_mutex_lock(&game->print_lock);
+	pthread_mutex_lock(&game->print_lock.mutex);
 	if (get_dead(game) != NULL && state != dead)
 	{
-		pthread_mutex_unlock(&game->print_lock);
+		pthread_mutex_unlock(&game->print_lock.mutex);
 		return ;
 	}
 	printf(GREEN "%zu" RESET " %zu ", time, philo->id);
@@ -37,7 +37,7 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 		printf(BOLD "died" RESET "\n");
 		game->dead_printed = true;
 	}
-	pthread_mutex_unlock(&game->print_lock);
+	pthread_mutex_unlock(&game->print_lock.mutex);
 }
 
 void	print_fork(t_game *game, t_philo *philo)
@@ -47,15 +47,15 @@ void	print_fork(t_game *game, t_philo *philo)
 	if (get_dead(game) != NULL)
 		return ;
 	time = ft_get_delay(game->start_time);
-	pthread_mutex_lock(&game->print_lock);
+	pthread_mutex_lock(&game->print_lock.mutex);
 	if (get_dead(game) != NULL)
 	{
-		pthread_mutex_unlock(&game->print_lock);
+		pthread_mutex_unlock(&game->print_lock.mutex);
 		return ;
 	}
 	printf(GREEN "%zu" RESET " %zu ", time, philo->id);
 	printf("has " CYAN "taken a fork" RESET "\n");
-	pthread_mutex_unlock(&game->print_lock);
+	pthread_mutex_unlock(&game->print_lock.mutex);
 }
 
 void	msg_exit(t_game *game, char *msg, int code)
