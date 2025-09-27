@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/27 19:13:50 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/27 19:23:11 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	*philo_routine(void *param)
 	philo = (t_philo *)param;
 	game = philo->game;
 	while (ft_get_time() < game->start_time)
-		continue ;
+		usleep(100);
 	if (game->thread_crashed)
 		return (NULL);
 	if (philo->id % 2 == 0)

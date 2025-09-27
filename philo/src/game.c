@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/26 01:09:54 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/27 19:23:30 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	*death_check(void *param)
 
 	game = (t_game *)param;
 	while (ft_get_time() < game->start_time)
-		continue ;
+		usleep(100);
 	if (game->thread_crashed)
 		return (NULL);
 	while (true)
