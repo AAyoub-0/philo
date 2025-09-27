@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/24 14:24:45 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/27 19:28:38 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ void	philo_sleep(t_game *game, t_philo *philo)
 
 void	philo_routine(t_philo *philo, t_game *game)
 {
+	t_bool	done;
+
+	done = false;
 	while (ft_get_time() < philo->start_time)
 		usleep(100);
 	pthread_create(&philo->death_thread, NULL, death_check, philo);
@@ -54,11 +57,11 @@ void	philo_routine(t_philo *philo, t_game *game)
 	while (get_philo_dead(game) == false)
 	{
 		philo_eat(game, philo);
-		if (philo->nb_max_eat != -1 && (int)get_meals_eaten(game,
+		if (!done && philo->nb_max_eat != -1 && (int)get_meals_eaten(game,
 				philo) == philo->nb_max_eat)
 		{
 			sem_post(game->nb_eat_sem);
-			break ;
+			done = true;
 		}
 		philo_sleep(game, philo);
 		philo_think(game, philo);
