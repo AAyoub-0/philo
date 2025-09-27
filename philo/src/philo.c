@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/26 01:08:52 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/27 19:13:50 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,17 @@ t_bool	philo_eat(t_game *game, t_philo *philo)
 	return (true);
 }
 
-t_bool	philo_sleep_n_think(t_game *game, t_philo *philo)
+t_bool	philo_sleep(t_game *game, t_philo *philo)
 {
 	if (get_dead(game) != NULL)
 		return (false);
 	print_state(game, philo, sleeping);
 	ft_usleep(game->time_sleep);
+	return (true);
+}
+
+t_bool	philo_think(t_game *game, t_philo *philo)
+{
 	if (get_dead(game) != NULL)
 		return (false);
 	print_state(game, philo, thinking);
@@ -71,9 +76,9 @@ void	*philo_routine(void *param)
 		if (!get_done(philo) && game->nb_max_eat != -1
 			&& (int)get_meals_eaten(philo) == game->nb_max_eat)
 			set_done(game, philo, true);
-		if (!philo_sleep_n_think(game, philo))
+		if (!philo_sleep(game, philo))
 			return (NULL);
-		if (get_done(philo) && get_nb_eat(game) >= game->nb_philo - 1)
+		if (!philo_think(game, philo))
 			return (NULL);
 	}
 	return (NULL);
