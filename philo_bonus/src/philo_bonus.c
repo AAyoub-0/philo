@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/29 11:07:41 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 11:22:23 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	philo_eat(t_game *game, t_philo *philo)
 	{
 		while (get_philo_dead(game) == false)
 			usleep(100);
+		return ;
 	}
 	usleep(500);
 	sem_wait(game->forks_sem);
