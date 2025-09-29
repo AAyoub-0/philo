@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/27 19:28:38 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 11:07:41 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	philo_eat(t_game *game, t_philo *philo)
 void	philo_think(t_game *game, t_philo *philo)
 {
 	print_state(game, philo->id, thinking);
+	usleep(100);
 }
 
 void	philo_sleep(t_game *game, t_philo *philo)
@@ -65,7 +66,6 @@ void	philo_routine(t_philo *philo, t_game *game)
 		}
 		philo_sleep(game, philo);
 		philo_think(game, philo);
-		usleep(100);
 	}
 	pthread_join(philo->death_thread, NULL);
 	pthread_join(philo->end_sim_thread, NULL);
