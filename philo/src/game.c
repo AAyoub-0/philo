@@ -6,11 +6,21 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:19:52 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/27 19:23:30 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 11:03:11 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+size_t	get_nb_eat(t_game *game)
+{
+	size_t	nb_eat;
+
+	pthread_mutex_lock(&game->nb_eat_lock.mutex);
+	nb_eat = game->nb_eat;
+	pthread_mutex_unlock(&game->nb_eat_lock.mutex);
+	return (nb_eat);
+}
 
 void	free_game(t_game *game)
 {

@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:35:40 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/26 01:05:30 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 11:03:07 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,4 @@ void	set_nb_eat(t_game *game, int nb_eat)
 	pthread_mutex_lock(&game->nb_eat_lock.mutex);
 	game->nb_eat = nb_eat;
 	pthread_mutex_unlock(&game->nb_eat_lock.mutex);
-}
-
-size_t	get_nb_eat(t_game *game)
-{
-	size_t	nb_eat;
-
-	pthread_mutex_lock(&game->nb_eat_lock.mutex);
-	nb_eat = game->nb_eat;
-	pthread_mutex_unlock(&game->nb_eat_lock.mutex);
-	return (nb_eat);
 }

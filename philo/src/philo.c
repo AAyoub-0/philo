@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 20:17:51 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/27 19:23:11 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 11:04:37 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,4 @@ void	set_done(t_game *game, t_philo *philo, t_bool done)
 	philo->done = done;
 	pthread_mutex_unlock(&philo->done_lock.mutex);
 	set_nb_eat(game, get_nb_eat(game) + 1);
-}
-
-t_bool	get_done(t_philo *philo)
-{
-	t_bool	done;
-
-	pthread_mutex_lock(&philo->done_lock.mutex);
-	done = philo->done;
-	pthread_mutex_unlock(&philo->done_lock.mutex);
-	return (done);
 }

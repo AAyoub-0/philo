@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:22:19 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/25 23:53:25 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 11:06:26 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,14 @@ void	safe_mutex_destroy(t_mutex *mutex)
 {
 	if (mutex->created == true)
 		pthread_mutex_destroy(&mutex->mutex);
+}
+
+t_bool	get_done(t_philo *philo)
+{
+	t_bool	done;
+
+	pthread_mutex_lock(&philo->done_lock.mutex);
+	done = philo->done;
+	pthread_mutex_unlock(&philo->done_lock.mutex);
+	return (done);
 }
