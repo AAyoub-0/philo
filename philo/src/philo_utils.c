@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 18:39:42 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/25 23:56:17 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:00:04 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ void	init_philos(t_game *game)
 			game->philos[i].prev = NULL;
 		else
 			game->philos[i].prev = &game->philos[game->nb_philo - 1];
-		game->philos[i].thread_created = true;
+		game->philos[i].thread_created = false;
 	}
 }

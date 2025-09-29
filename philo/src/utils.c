@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 18:22:27 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/25 23:57:13 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:05:36 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 {
 	size_t	time;
 
-	if (game->dead_printed)
-		return ;
 	time = ft_get_delay(game->start_time);
 	pthread_mutex_lock(&game->print_lock.mutex);
-	if (get_dead(game) != NULL && state != dead)
+	if ((get_dead(game) != NULL && state != dead))
 	{
 		pthread_mutex_unlock(&game->print_lock.mutex);
 		return ;
@@ -32,7 +30,7 @@ void	print_state(t_game *game, t_philo *philo, t_philo_state state)
 		printf("is  " YELLOW "eating" RESET "\n");
 	else if (state == sleeping)
 		printf("is  " BLUE "sleeping" RESET "\n");
-	else if (state == dead)
+	else if (state == dead && !game->dead_printed)
 	{
 		printf(BOLD "died" RESET "\n");
 		game->dead_printed = true;
@@ -58,12 +56,19 @@ void	print_fork(t_game *game, t_philo *philo)
 	pthread_mutex_unlock(&game->print_lock.mutex);
 }
 
-void	msg_exit(t_game *game, char *msg, int code)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	if (msg)
-		printf("%s\n", msg);
-	free_game(game);
-	exit(code);
+	size_t			i;
+	unsigned char	*tab;
+
+	i = 0;
+	tab = (unsigned char *)s;
+	while (i < n)
+	{
+		tab[i] = (unsigned char)c;
+		i++;
+	}
+	return (s);
 }
 
 size_t	mini_atoi(char *str)

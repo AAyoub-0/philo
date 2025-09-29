@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:22:19 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/29 11:06:26 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:29:33 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	pthread_safe_philo(t_game *game, t_philo *philo)
 		philo->thread_created = false;
 		printf("thread failed to create\n");
 	}
+	philo->thread_created = true;
 }
 
 void	pthread_safe_death_thread(t_game *game)
@@ -31,14 +32,16 @@ void	pthread_safe_death_thread(t_game *game)
 		game->death_thread_created = false;
 		printf("thread failed to create\n");
 	}
+	game->death_thread_created = true;
 }
 
 void	safe_mutex_init(t_game *game, t_mutex *mutex)
 {
 	if (pthread_mutex_init(&mutex->mutex, NULL) != 0)
 	{
-		msg_exit(game, "mutex init failure", 1);
-		mutex->created = false;
+		printf("mutex init failure\n");
+		free_game(game);
+		exit(EXIT_FAILURE);
 	}
 	mutex->created = true;
 }

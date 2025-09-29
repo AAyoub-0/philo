@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:26:47 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/27 19:18:27 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:27:45 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,19 @@ static void	init_game(t_game *game)
 	if (!game->philos)
 		exit(EXIT_FAILURE);
 	game->dead = NULL;
+	ft_memset(game->philos, 0, sizeof(t_philo) * game->nb_philo);
+	game->print_lock.created = false;
+	game->nb_eat_lock.created = false;
+	game->dead_lock.created = false;
+	game->philo_check_lock.created = false;
 	safe_mutex_init(game, &game->print_lock);
 	safe_mutex_init(game, &game->nb_eat_lock);
 	safe_mutex_init(game, &game->dead_lock);
+	safe_mutex_init(game, &game->philo_check_lock);
 	game->dead_printed = false;
 	game->thread_crashed = false;
 	game->death_thread_created = true;
-	game->start_time = ft_get_time() + (game->nb_philo * 5);
+	game->start_time = ft_get_time() + (game->nb_philo * 50);
 	game->nb_eat = 0;
 	init_philos(game);
 }

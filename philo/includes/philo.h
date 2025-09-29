@@ -6,7 +6,7 @@
 /*   By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:28:02 by aboumall          #+#    #+#             */
-/*   Updated: 2025/09/26 01:05:39 by aboumall         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:16:33 by aboumall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_game
 	t_mutex			print_lock;
 	t_mutex			nb_eat_lock;
 	t_mutex			dead_lock;
+	t_mutex			philo_check_lock;
 	pthread_t		death_thread;
 }					t_game;
 
@@ -137,6 +138,7 @@ void				print_state(t_game *game, t_philo *philo,
 						t_philo_state state);
 void				print_fork(t_game *game, t_philo *philo);
 void				msg_exit(t_game *game, char *msg, int code);
+void				*ft_memset(void *s, int c, size_t n);
 size_t				mini_atoi(char *str);
 t_bool				ft_isdigit(char c);
 
