@@ -6,7 +6,7 @@
 #    By: aboumall <aboumall42@gmail.com>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/25 16:29:40 by aboumall          #+#    #+#              #
-#    Updated: 2025/09/27 19:24:40 by aboumall         ###   ########.fr        #
+#    Updated: 2025/10/01 16:38:06 by aboumall         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ HEAD 	= includes/philo_bonus.h
 
 CC 		= cc
 
-CFLAGS 	= -Werror -Wextra -Wall -Iincludes -std=gnu11
+CFLAGS 	= -Werror -Wextra -Wall -Iincludes
 
 SRC_DIR 	= 	src
 OBJ_DIR 	= 	obj
